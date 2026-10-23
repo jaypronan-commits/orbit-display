@@ -1,0 +1,4240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Orbit</title>
+
+<style>
+
+body {
+    margin: 0;
+    background: #050914;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    position: relative;
+
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    margin: 5vh auto;
+    padding: 30px;
+    box-sizing: border-box;
+
+    background: #0b1220;
+
+    border: 2px solid #334a70;
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 25px rgba(60,120,255,0.25);
+
+    text-align: center;
+}
+
+#clockTime {
+    font-size: 112px;
+    margin-top: 180px;
+    letter-spacing: 7px;
+    font-weight: 300;
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,0.35),
+        0 0 22px rgba(100,160,255,0.45);
+
+    padding-bottom: 28px;
+
+}
+
+#clockDivider {
+    width: 70%;
+    height: 30px;
+    margin: 0 auto;
+}
+
+#clockDivider svg {
+    display: block;
+    width: 100%;
+    height: 30px;
+}
+
+.atomicLance {
+    fill: #7f9fc9;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(100,160,255,0.35)
+        );
+}
+
+.atomicDot {
+    fill: #9fb7d9;
+
+    filter:
+        drop-shadow(
+            0 0 5px
+            rgba(100,160,255,0.55)
+        );
+}
+
+#clockDate {
+    font-size: 28px;
+    margin-top: 30px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #d9e5f5;
+}
+
+#location {
+    font-size: 18px;
+    margin-top: 22px;
+    letter-spacing: 7px;
+    color: #7f9fc9;
+    text-transform: uppercase;
+}
+
+
+
+/* Orbit Weather Card — v5.5 */
+
+#weatherCard {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+    padding-top: 2px;
+}
+
+#weatherLocation {
+    flex: 0 0 auto;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 7px;
+    color: #9fbfe9;
+    padding: 4px 0 14px;
+    border-bottom: 1px solid #334a70;
+}
+
+/* The tallest stripe: today's weather */
+
+#weatherCurrent {
+    flex: 1 1 auto;
+    min-height: 250px;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 0;
+    border-bottom: 2px solid #334a70;
+}
+
+.weatherToday,
+.weatherMain,
+.weatherDetails {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.weatherToday {
+    gap: 8px;
+}
+
+#weatherTodayIcon {
+    font-size: 76px;
+    line-height: 1.2;
+    filter: drop-shadow(0 0 12px rgba(100,160,255,0.3));
+}
+
+#weatherTodayDescription {
+    font-size: 18px;
+    color: #b8cce8;
+}
+
+#weatherTodayHighLow {
+    font-size: 22px;
+    line-height: 1.7;
+    color: #d9e5f5;
+}
+
+.weatherMain {
+    border-left: 1px solid #263a5a;
+    border-right: 1px solid #263a5a;
+    padding: 0 8px;
+}
+
+#weatherTemp {
+    font-size: 104px;
+    line-height: 1.05;
+    font-weight: 300;
+    white-space: nowrap;
+    text-shadow:
+        0 0 8px rgba(255,255,255,0.25),
+        0 0 22px rgba(100,160,255,0.35);
+}
+
+#weatherRealFeel {
+    margin-top: 12px;
+    font-size: 21px;
+    color: #9fb7d9;
+}
+
+.weatherDetails {
+    align-items: flex-start;
+    gap: 20px;
+    padding-left: 8px;
+}
+
+.weatherDetail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.weatherDetailIcon {
+    width: 30px;
+    font-size: 25px;
+    text-align: center;
+}
+
+.weatherDetailLabel {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #7f9fc9;
+    margin-bottom: 4px;
+}
+
+.weatherDetailValue {
+    font-size: 19px;
+    color: #f0f5ff;
+    white-space: nowrap;
+}
+
+/* Five-day forecast stripe */
+
+
+#weatherForecastTitle {
+    flex: 0 0 auto;
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #9fbfe9;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+#weatherForecast {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.weatherForecastDay {
+    background: #101b2d;
+    border: 1px solid #263a5a;
+    border-radius: 10px;
+    padding: 12px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.weatherForecastName {
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #9fb7d9;
+}
+
+.weatherForecastIcon {
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.weatherForecastDescription {
+    font-size: 12px;
+    color: #9fb7d9;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.weatherForecastHigh {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.weatherForecastLow {
+    font-size: 16px;
+    color: #8da5c2;
+}
+
+/* Adapt the layout for narrower tablet screens */
+
+@media (max-width: 650px) {
+    #weatherCard {
+        gap: 10px;
+    }
+
+    #weatherLocation {
+        font-size: 22px;
+        letter-spacing: 4px;
+    }
+
+    #weatherCurrent {
+        grid-template-columns: 0.85fr 1.15fr 1fr;
+        gap: 5px;
+        padding: 10px 0;
+    }
+
+    #weatherTodayIcon {
+        font-size: 52px;
+    }
+
+    #weatherTodayDescription {
+        font-size: 14px;
+    }
+
+    #weatherTodayHighLow {
+        font-size: 17px;
+    }
+
+    #weatherTemp {
+        font-size: 66px;
+    }
+
+    #weatherRealFeel {
+        font-size: 16px;
+    }
+
+    .weatherDetails {
+        gap: 16px;
+        padding-left: 2px;
+    }
+
+    .weatherDetail {
+        gap: 4px;
+    }
+
+    .weatherDetailIcon {
+        width: 22px;
+        font-size: 18px;
+    }
+
+    .weatherDetailLabel {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .weatherDetailValue {
+        font-size: 13px;
+    }
+
+    #weatherForecast {
+        gap: 4px;
+    }
+
+    .weatherForecastDay {
+        padding: 8px 2px;
+        gap: 6px;
+    }
+
+    .weatherForecastName {
+        font-size: 12px;
+    }
+
+    .weatherForecastIcon {
+        font-size: 25px;
+    }
+
+    .weatherForecastDescription {
+        font-size: 10px;
+    }
+
+    .weatherForecastHigh {
+        font-size: 17px;
+    }
+
+    .weatherForecastLow {
+        font-size: 14px;
+    }
+}
+
+
+/* Sunrise/Sunset Card */
+
+#sunriseSunsetCard {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 35px 25px;
+    color: #f4f6fa;
+    text-align: center;
+}
+
+#sunriseSunsetTitle {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #f5c451;
+    margin: 5px 0 35px;
+}
+
+#sunriseSunsetMessage {
+    font-size: 20px;
+    color: #b8c7d9;
+}
+
+
+#sunriseSunsetTimes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: -55px;
+}
+
+.sunriseSunsetTime {
+    flex: 1;
+    text-align: center;
+}
+
+.sunriseSunsetLabel {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #b8c7d9;
+    margin-bottom: 8px;
+}
+
+#sunriseTimeValue,
+#sunsetTimeValue {
+    font-size: 26px;
+    color: #f4f6fa;
+}
+
+#daylightDurationValue {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f5c451;
+}
+
+
+/* Moon Card styling */
+
+#moonCard {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 35px 25px;
+    color: #f4f6fa;
+    text-align: center;
+}
+
+#moonTitle {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #d9e1ec;
+    margin: 0 0 5px;
+}
+
+#moonArc {
+    display: block;
+    width: 100%;
+    height: 300px;
+    overflow: visible;
+}
+
+.moonInfoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: -35px;
+    position: relative;
+}
+
+.moonInfoItem {
+    flex: 1;
+    text-align: center;
+}
+
+.moonInfoLabel {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #b8c7d9;
+    margin-bottom: 8px;
+}
+
+.moonInfoValue {
+    font-size: 26px;
+    color: #f4f6fa;
+}
+
+#moonIlluminationValue {
+    font-size: 28px;
+    font-weight: bold;
+    color: #d9e1ec;
+}
+
+
+#moonLowerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+#moonIllustration {
+    flex: 1;
+    min-width: 0;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#moonUpcomingPhases {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    font-size: 22px;
+    line-height: 1.8;
+    color: #b8c7d9;
+}
+
+
+#moonCurrentPhase {
+    font-size: 25px;
+    font-weight: bold;
+    color: #e1e9f5;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+
+
+
+
+
+
+#newsSource {
+position: relative;
+display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
+
+background: linear-gradient(
+    to bottom,
+    #3b4553 0%,
+    #303743 100%
+);
+
+    padding: 12px 20px;
+    height: 24px;
+    margin: -32px -32px 25px -32px;
+
+    border-bottom: 3px solid #9fb7d9;
+}
+#newsSource button {
+    background: none;
+    border: none;
+    color: white;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    padding: 0 10px;
+}
+
+#newsSource button:hover {
+    color: #9fb7d9;
+}
+
+#storyNavigation {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 12px;
+}
+
+#newsSource.espn {
+    background: linear-gradient(
+        to bottom,
+        #e3262f 0%,
+        #c9151d 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.gizmodo {
+    background: linear-gradient(
+        to bottom,
+        #465a4d 0%,
+        #34443a 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.nytimes {
+    background: linear-gradient(
+        to bottom,
+        #555b64 0%,
+        #424850 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.slate {
+    background: linear-gradient(
+        to bottom,
+        #8a3f50 0%,
+        #71303f 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.ringer {
+    background: linear-gradient(
+        to bottom,
+        #2f9b68 0%,
+        #247a50 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.ars {
+    background: linear-gradient(
+        to bottom,
+        #c94f3d 0%,
+        #a83d2f 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+#newsSource.ap {
+    background: linear-gradient(
+        to bottom,
+        #3f6f91 0%,
+        #335b78 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.msnow {
+    background: linear-gradient(
+        to bottom,
+        #3278a8 0%,
+        #28658f 100%
+    );
+    border-bottom: 3px solid #9fb7d9;
+}
+
+#newsSource.npr {
+    background: linear-gradient(
+        to bottom,
+        #52617c 0%,
+        #3e4b63 100%
+    );
+}
+
+
+
+
+#newsHeadline {
+    font-size: 42px;
+    line-height: 1.2;
+    margin: 20px auto;
+    max-width: 800px;
+    cursor: pointer;
+
+    padding: 12px 10px;
+
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#newsExcerpt {
+    font-size: 21px;
+    line-height: 1.5;
+    max-width: 720px;
+    margin: 22px auto;
+    color: #b8c5d8;
+}
+
+#storyPhoto {
+    display: none;
+    width: 70%;
+    max-width: 700px;
+    max-height: 300px;
+    object-fit: cover;
+
+    margin: 0 auto 25px auto;
+
+    border: 1px solid #263a5a;
+    border-radius: 14px;
+
+    box-shadow:
+        0 0 18px rgba(0,0,0,0.45),
+        0 0 8px rgba(60,120,255,0.08);
+}
+
+
+#storyFooter {
+    position: absolute;
+    left: 112px;
+    right: 112px;
+    bottom: 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-top: 10px;
+    border-top: 1px solid #334a70;
+}
+
+#storyDate {
+    font-size: 14px;
+    margin: 0;
+    color: #7185a5;
+    letter-spacing: 1px;
+    text-align: right;
+}
+
+#storyNumber {
+    font-size: 16px;
+    margin: 0;
+    color: #7185a5;
+    text-align: left;
+}
+
+#newsStatus {
+    display: none;
+}
+
+/* Orbit Card navigation */
+
+.orbitNavigation {
+    position: absolute;
+
+    bottom: 12px;
+
+    width: 42px;
+    height: 42px;
+
+    background: none;
+    border: none;
+
+    color: #7185a5;
+
+    font-size: 24px;
+    font-weight: normal;
+
+    cursor: pointer;
+
+    opacity: 0.65;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    transition:
+        color 0.2s,
+        opacity 0.2s;
+}
+
+.orbitNavigation:hover {
+    color: #9fb7d9;
+    opacity: 1;
+}
+
+#previousCard {
+    left: 58px;
+}
+
+#nextCard {
+    right: 58px;
+}
+
+/* Section navigation: outer skip-track buttons */
+.sectionNavigation {
+    position: absolute;
+    bottom: 12px;
+    width: 42px;
+    height: 42px;
+    background: none;
+    border: none;
+    color: #7185a5;
+    font-size: 24px;
+    font-weight: normal;
+    cursor: pointer;
+    opacity: 0.65;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s, opacity 0.2s;
+}
+
+.sectionNavigation:hover {
+    color: #9fb7d9;
+    opacity: 1;
+}
+
+#previousSection {
+    left: 8px;
+}
+
+#nextSection {
+    right: 8px;
+}
+
+/* Draw the section-button divider at the same visual height as the arrow. */
+.sectionNavigation .sectionBar {
+    display: block;
+    position: relative;
+    top: 1px;
+    width: 1px;
+    height: 13px;
+    flex: 0 0 1px;
+    background: currentColor;
+}
+
+.sectionNavigation .sectionArrow {
+    display: block;
+    line-height: 1;
+}
+
+#previousSection,
+#nextSection {
+    gap: 3px;
+}
+
+
+/* Christmas Countdown Card */
+#christmasCountdownCard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 48px 36px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+
+#christmasPlaque {
+    position: relative;
+    width: 88%;
+    max-width: 680px;
+    padding: 34px 20px 42px;
+    box-sizing: border-box;
+
+    /* Dark walnut with more natural, irregular grain */
+    background:
+        radial-gradient(
+            ellipse at 18% 28%,
+            rgba(177, 119, 66, 0.16) 0%,
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 78% 72%,
+            rgba(8, 4, 2, 0.28) 0%,
+            transparent 42%
+        ),
+        repeating-linear-gradient(
+            2deg,
+            transparent 0%,
+            rgba(12, 7, 4, 0.13) 17%,
+            rgba(190, 139, 83, 0.07) 19%,
+            transparent 31%,
+            rgba(8, 4, 2, 0.17) 48%,
+            transparent 63%
+        ),
+        linear-gradient(
+            145deg,
+            #68472f 0%,
+            #50331f 18%,
+            #352014 48%,
+            #4a2d1b 72%,
+            #26170f 100%
+        );
+
+    border: 8px solid #50351f;
+    border-radius: 5px;
+
+    box-shadow:
+        0 14px 25px rgba(0, 0, 0, 0.75),
+        inset 0 0 0 2px #9a7148,
+        inset 0 0 0 5px #2a190f,
+        inset 0 5px 10px rgba(225, 179, 121, 0.18),
+        inset 0 -8px 14px rgba(0, 0, 0, 0.55);
+}
+
+/* Independent spaces for seasonal plaque decorations */
+#christmasDecorationLeft,
+#christmasDecorationRight {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+#christmasDecorationLeft {
+    left: 18px;
+}
+
+#christmasDecorationRight {
+    right: 18px;
+}
+
+
+
+#christmasHeading {
+    margin-bottom: 28px;
+    color: #f5e2b8;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 2px 3px 3px #160d07;
+}
+
+#christmasDigits {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+
+.christmasDigit {
+    position: relative;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 112px;
+    height: 150px;
+    box-sizing: border-box;
+    color: #302317;
+
+
+    /* Aged ivory face, with subtle recessed holes near the top */
+    background:
+        radial-gradient(
+            circle at 21px 10px,
+            #49351f 0px,
+            #49351f 3px,
+            #8a6a43 4px,
+            transparent 6px
+        ),
+        radial-gradient(
+            circle at calc(100% - 21px) 10px,
+            #49351f 0px,
+            #49351f 3px,
+            #8a6a43 4px,
+            transparent 6px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(105, 75, 43, 0.20) 0%,
+            transparent 12%,
+            transparent 86%,
+            rgba(105, 75, 43, 0.16) 100%
+        ),
+        linear-gradient(
+            180deg,
+            #e9d9b5 0%,
+            #d8c39a 48%,
+            #c9b184 100%
+        );
+
+    /* Dark, aged edges */
+    border: 3px solid #8a6a43;
+    border-radius: 4px;
+
+    /* Raised tile with a softly worn inner face */
+    box-shadow:
+        0 8px 10px rgba(0, 0, 0, 0.55),
+        inset 0 0 0 2px rgba(245, 226, 188, 0.45),
+        inset 0 0 8px rgba(90, 58, 25, 0.22);
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 100px;
+    font-weight: bold;
+    line-height: 1;
+
+    /* Slightly softened, printed-looking numeral */
+    text-shadow: 1px 1px 1px rgba(255, 248, 225, 0.25);
+}
+
+
+
+/* Antique-brass pegs, seated into the top of each tile */
+.christmasDigit::before,
+.christmasDigit::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    width: 9px;
+    height: 9px;
+    box-sizing: border-box;
+    border-radius: 50%;
+
+    /* Dark socket surrounding the brass */
+    background: radial-gradient(
+        circle at 35% 30%,
+        #f4dfaa 0%,
+        #c5a05a 28%,
+        #967039 55%,
+        #49331c 78%,
+        #261a10 100%
+    );
+
+    border: 1px solid #49331c;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.75),
+        inset 0 0 0 1px rgba(255, 226, 157, 0.35);
+}
+
+.christmasDigit::before {
+    left: 17px;
+}
+
+.christmasDigit::after {
+    right: 17px;
+}
+
+
+
+#christmasLights {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 48px;
+    right: 48px;
+    height: 78%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Vintage Christmas light cord */
+
+
+/* Individual vintage bulbs */
+.christmasBulb {
+    position: absolute;
+    z-index: 1;
+    width: 27px;
+    height: 34px;
+    border-radius: 48% 48% 45% 45%;
+    background: radial-gradient(
+        ellipse at 35% 25%,
+        rgba(255,255,255,0.9) 0%,
+        var(--bulb-color) 32%,
+        var(--bulb-color) 68%,
+        #392b25 100%
+    );
+    border: 2px solid rgba(20,20,20,0.75);
+    box-sizing: border-box;
+    box-shadow:
+        0 0 5px var(--bulb-color),
+        0 0 12px var(--bulb-color),
+        0 0 22px color-mix(in srgb, var(--bulb-color) 45%, transparent),
+        0 2px 3px rgba(0,0,0,0.7);
+}
+
+/* Dark socket between wire and bulb */
+.christmasBulb::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: -7px;
+    width: 11px;
+    height: 8px;
+    border-radius: 3px 3px 1px 1px;
+    background: linear-gradient(
+        90deg,
+        #171a14,
+        #555747 45%,
+        #24271e
+    );
+    border: 1px solid #151710;
+    box-sizing: border-box;
+}
+
+.christmasBulb.red    { --bulb-color: #ff3b30; }
+.christmasBulb.yellow { --bulb-color: #ffd84a; }
+.christmasBulb.green  { --bulb-color: #43e06f; }
+.christmasBulb.blue   { --bulb-color: #45baff; }
+
+
+/* Christmas Countdown — lighting states */
+
+/* Lights off during the day and overnight */
+#christmasLights.lights-off .christmasBulb {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.7);
+    filter: brightness(0.28);
+}
+
+/* Steady evening lights outside December */
+#christmasLights.lights-on .christmasBulb {
+    animation: none;
+}
+
+/* Festive December twinkle */
+#christmasLights.lights-twinkle .christmasBulb {
+    animation: christmasTwinkle 1.8s ease-in-out infinite alternate;
+}
+
+/* Stagger the bulbs so they don't all brighten together */
+#christmasLights.lights-twinkle .christmasBulb:nth-child(3n) {
+    animation-delay: -0.6s;
+}
+
+#christmasLights.lights-twinkle .christmasBulb:nth-child(3n + 1) {
+    animation-delay: -1.2s;
+}
+
+/* Dim the wooden plaque overnight */
+#christmasPlaque.plaque-dimmed {
+    filter: brightness(0.48);
+}
+
+/* Gently vary each bulb's brightness */
+@keyframes christmasTwinkle {
+    0% {
+        filter: brightness(0.75);
+    }
+    100% {
+        filter: brightness(1.35);
+    }
+}
+
+
+/* Day/Night Map Card */
+#dayNightMapCard {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#mapWrapper {
+    position: relative;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#chartdiv {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    font-size: 0.875rem;
+}
+
+#clockdiv {
+    width: 100%;
+    flex: 0 0 auto;
+    text-align: center;
+    padding: 6px 0 0;
+    font-family: Arial, sans-serif;
+    color: #d9e5f5;
+}
+
+#dateDisplay {
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+#timeDisplay {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.orbit-map-button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #456078;
+    border-radius: 8px;
+    background: rgba(23, 40, 58, 0.92);
+    color: #e9f4ff;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.orbit-map-button:hover {
+    background: #29445e;
+    border-color: #7899b5;
+}
+
+.orbit-map-button:focus-visible {
+    outline: 2px solid #a9d8ff;
+    outline-offset: 2px;
+}
+
+</style>
+
+
+<!-- amCharts resources for the Day/Night Map card -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Responsive.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Material.js"></script>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div id="clockCard">
+
+        <div id="clockTime">
+            Current Time
+        </div>
+
+<div id="clockDivider">
+
+    <svg
+        viewBox="0 0 600 30"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+    >
+
+<path
+    class="atomicLance"
+    d="M 294,15
+       L 250,11
+       C 242,6 233,6 223,10
+       C 170,13 75,14 10,15
+       C 75,16 170,17 223,20
+       C 233,24 242,24 250,19
+       Z"
+/>
+
+ <path
+    class="atomicLance"
+    d="M 306,15
+       L 350,11
+       C 358,6 367,6 377,10
+       C 430,13 525,14 590,15
+       C 525,16 430,17 377,20
+       C 367,24 358,24 350,19
+       Z"
+/>
+
+        <circle
+            cx="300"
+            cy="15"
+            r="4"
+            class="atomicDot"
+        />
+
+    </svg>
+
+</div>
+
+        <div id="clockDate"></div>
+
+        <div id="location">
+            Austin, Texas
+        </div>
+
+    </div>
+
+
+<div id="sectionTitleCard" style="display:none;">
+    <div id="sectionTitleHeader" style="font-size: 36px; font-weight: bold; letter-spacing: 4px; padding: 36px 20px; border-bottom: 3px solid #9fb7d9; margin: -32px -32px 25px -32px; color: white;">
+        SECTION
+    </div>
+    
+<div id="sectionClockTime" style="font-size: 112px; margin-top: 120px; letter-spacing: 7px; font-weight: 300; text-shadow: 0 0 8px rgba(255,255,255,0.35), 0 0 22px rgba(100,160,255,0.45); padding-bottom: 28px;">
+    --:--
+</div>
+
+<div id="sectionClockDivider">
+    <svg viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true">
+        <path class="atomicLance" d="M 294,15 L 250,11 C 242,6 233,6 223,10 C 170,13 75,14 10,15 C 75,16 170,17 223,20 C 233,24 242,24 250,19 Z"/>
+        <path class="atomicLance" d="M 306,15 L 350,11 C 358,6 367,6 377,10 C 430,13 525,14 590,15 C 525,16 430,17 377,20 C 367,24 358,24 350,19 Z"/>
+        <circle cx="300" cy="15" r="4" class="atomicDot"/>
+    </svg>
+</div>
+
+
+    <div id="sectionClockDate" style="font-size: 28px; margin-top: 30px; letter-spacing: 4px; text-transform: uppercase; color: #d9e5f5;">
+        --
+    </div>
+    <div style="font-size: 18px; margin-top: 22px; letter-spacing: 7px; color: #7f9fc9; text-transform: uppercase;">
+        Austin, Texas
+    </div>
+    <div id="sectionWeather"
+         style="margin-top: 24px; font-size: 32px; color: #b8cce8; letter-spacing: 2px;">
+        🌤️ --° Loading weather...
+    </div>
+</div>
+
+
+
+<div id="weatherCard" style="display:none;">
+
+    <!-- Stripe 1: Location -->
+    <div id="weatherLocation">
+        AUSTIN, TX
+    </div>
+
+    <!-- Stripe 2: Current day -->
+    <div id="weatherCurrent">
+
+        <div class="weatherToday">
+            <div id="weatherTodayIcon">🌤️</div>
+            <div id="weatherTodayDescription">
+                Loading...
+            </div>
+            <div id="weatherTodayHighLow">
+                HIGH --°<br>
+                LOW --°
+            </div>
+        </div>
+
+        <div class="weatherMain">
+            <div id="weatherTemp">--°</div>
+            <div id="weatherRealFeel">
+                Real Feel --°
+            </div>
+        </div>
+
+        <div class="weatherDetails">
+
+            <div class="weatherDetail">
+                <div class="weatherDetailIcon">➤</div>
+                <div>
+                    <div class="weatherDetailLabel">WIND</div>
+                    <div class="weatherDetailValue" id="weatherWind">
+                        --
+                    </div>
+                </div>
+            </div>
+
+            <div class="weatherDetail">
+                <div class="weatherDetailIcon">💧</div>
+                <div>
+                    <div class="weatherDetailLabel">HUMIDITY</div>
+                    <div class="weatherDetailValue" id="weatherHumidity">
+                        --
+                    </div>
+                </div>
+            </div>
+
+            <div class="weatherDetail">
+                <div class="weatherDetailIcon">◉</div>
+                <div>
+                    <div class="weatherDetailLabel">PRESSURE</div>
+                    <div class="weatherDetailValue" id="weatherPressure">
+                        --
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Stripe 3: Five days, beginning tomorrow -->
+    <div id="weatherForecastTitle">
+        THE DAYS AHEAD
+    </div>
+
+    <div id="weatherForecast">
+
+        <div class="weatherForecastDay">
+            <div class="weatherForecastName">---</div>
+            <div class="weatherForecastIcon">⛅</div>
+            <div class="weatherForecastDescription">--</div>
+            <div class="weatherForecastHigh">--°</div>
+            <div class="weatherForecastLow">--°</div>
+        </div>
+
+        <div class="weatherForecastDay">
+            <div class="weatherForecastName">---</div>
+            <div class="weatherForecastIcon">⛅</div>
+            <div class="weatherForecastDescription">--</div>
+            <div class="weatherForecastHigh">--°</div>
+            <div class="weatherForecastLow">--°</div>
+        </div>
+
+        <div class="weatherForecastDay">
+            <div class="weatherForecastName">---</div>
+            <div class="weatherForecastIcon">⛅</div>
+            <div class="weatherForecastDescription">--</div>
+            <div class="weatherForecastHigh">--°</div>
+            <div class="weatherForecastLow">--°</div>
+        </div>
+
+        <div class="weatherForecastDay">
+            <div class="weatherForecastName">---</div>
+            <div class="weatherForecastIcon">⛅</div>
+            <div class="weatherForecastDescription">--</div>
+            <div class="weatherForecastHigh">--°</div>
+            <div class="weatherForecastLow">--°</div>
+        </div>
+
+        <div class="weatherForecastDay">
+            <div class="weatherForecastName">---</div>
+            <div class="weatherForecastIcon">⛅</div>
+            <div class="weatherForecastDescription">--</div>
+            <div class="weatherForecastHigh">--°</div>
+            <div class="weatherForecastLow">--°</div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<div id="sunriseSunsetCard" style="display:none;">
+
+    <h1 id="sunriseSunsetTitle">
+        SUNRISE &amp; SUNSET
+    </h1>
+
+    <svg
+        id="sunriseSunsetArc"
+        viewBox="0 0 600 300"
+        width="100%"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <!-- Complete, muted path of the sun -->
+        <path
+            d="M 70 250 A 230 200 0 0 1 530 250"
+            fill="none"
+            stroke="#53647a"
+            stroke-width="6"
+            stroke-linecap="round"
+        />
+
+        <!-- Temporary gold section, following the same arc -->
+<path
+    id="sunriseSunsetGoldArc"
+    d="M 70 250 A 230 200 0 0 1 530 250"
+    fill="none"
+    stroke="#f5c451"
+    stroke-width="6"
+    stroke-linecap="round"
+    pathLength="100"
+    stroke-dasharray="35 65"
+/>
+
+
+        <!-- Temporary sun position -->    
+    <circle
+    id="sunriseSunsetSun"
+    cx="300"
+    cy="50"
+    r="11"
+    fill="#f5c451"
+/>
+
+
+        <!-- Horizontal horizon -->
+        <line
+            x1="35" y1="250"
+            x2="565" y2="250"
+            stroke="#53647a"
+            stroke-width="8"
+            stroke-linecap="round"
+        />
+    </svg>
+
+
+<div id="sunriseSunsetTimes">
+
+    <div class="sunriseSunsetTime">
+        <div class="sunriseSunsetLabel">SUNRISE</div>
+        <div id="sunriseTimeValue">--:--</div>
+    </div>
+
+    <div class="sunriseSunsetTime sunriseSunsetCenter">
+        <div class="sunriseSunsetLabel">DAYLIGHT</div>
+        <div id="daylightDurationValue">--h --m</div>
+    </div>
+
+    <div class="sunriseSunsetTime">
+        <div class="sunriseSunsetLabel">SUNSET</div>
+        <div id="sunsetTimeValue">--:--</div>
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+<div id="moonCard" style="display:none;">
+
+    <h1 id="moonTitle">
+        MOON
+    </h1>
+
+    <!-- Moon's path across the sky -->
+    <svg
+        id="moonArc"
+        viewBox="0 0 600 300"
+        width="100%"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <!-- Complete, muted arc -->
+        <path
+            d="M 70 250 A 230 200 0 0 1 530 250"
+            fill="none"
+            stroke="#53647a"
+            stroke-width="6"
+            stroke-linecap="round"
+        />
+
+        <!-- Illuminated portion of the arc -->
+        <path
+            id="moonLitArc"
+            d="M 70 250 A 230 200 0 0 1 530 250"
+            fill="none"
+            stroke="#d9e1ec"
+            stroke-width="6"
+            stroke-linecap="round"
+            pathLength="100"
+            stroke-dasharray="0 100"
+        />
+
+        <!-- Moon position marker -->
+        <circle
+            id="moonArcMarker"
+            cx="70"
+            cy="250"
+            r="11"
+            fill="#d9e1ec"
+        />
+
+        <!-- Horizon -->
+        <line
+            x1="35" y1="250"
+            x2="565" y2="250"
+            stroke="#53647a"
+            stroke-width="8"
+            stroke-linecap="round"
+        />
+    </svg>
+
+    <!-- Moonrise, illumination, and moonset -->
+    <div class="moonInfoRow">
+
+        <div class="moonInfoItem">
+            <div class="moonInfoLabel">MOONRISE</div>
+            <div class="moonInfoValue" id="moonriseValue">--:--</div>
+        </div>
+
+        <div class="moonInfoItem">
+            <div class="moonInfoLabel">ILLUMINATION</div>
+            <div class="moonInfoValue" id="moonIlluminationValue">--%</div>
+        </div>
+
+        <div class="moonInfoItem">
+            <div class="moonInfoLabel">MOONSET</div>
+            <div class="moonInfoValue" id="moonsetValue">--:--</div>
+        </div>
+
+    </div>
+
+    <!-- Moon illustration and upcoming phases -->
+    <div id="moonLowerRow">
+
+
+<div id="moonIllustration">
+
+    <svg
+        id="moonDisk"
+        viewBox="0 0 200 200"
+        width="180"
+        height="180"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <defs>
+            <radialGradient id="moonSurface" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#f5f6f8"/>
+                <stop offset="65%" stop-color="#d9e1ec"/>
+                <stop offset="100%" stop-color="#8795a8"/>
+            </radialGradient>
+        </defs>
+
+        <!-- Main lunar disk -->
+        <circle
+            cx="100"
+            cy="100"
+            r="82"
+            fill="url(#moonSurface)"
+        />
+
+        <!-- Subtle lunar craters -->
+        <g fill="#aeb9c8" opacity="0.48">
+            <circle cx="70" cy="66" r="13"/>
+            <circle cx="123" cy="58" r="8"/>
+            <circle cx="137" cy="105" r="17"/>
+            <circle cx="83" cy="124" r="11"/>
+            <circle cx="111" cy="151" r="7"/>
+            <circle cx="54" cy="100" r="6"/>
+        </g>
+
+        <g
+            fill="none"
+            stroke="#f5f6f8"
+            stroke-width="2"
+            opacity="0.45"
+        >
+            <circle cx="70" cy="66" r="13"/>
+            <circle cx="137" cy="105" r="17"/>
+            <circle cx="83" cy="124" r="11"/>
+        </g>
+
+    </svg>
+
+</div>
+
+        <div id="moonUpcomingPhases">
+            <div id="moonCurrentPhase">Waxing Crescent</div>
+            <div id="nextNewMoonRow">Next New Moon: <span id="nextNewMoonValue">--</span></div>
+            <div id="nextFullMoonRow">Next Full Moon: <span id="nextFullMoonValue">--</span></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div id="dayNightMapCard" style="display:none;">
+
+    <div id="mapWrapper">
+        <div id="chartdiv"></div>
+
+        <div id="mapNavigation" style="position:absolute; right:16px; bottom:16px; z-index:10; display:flex; gap:8px;">
+            <button id="primeMeridianButton" class="orbit-map-button" title="Prime Meridian" aria-label="Prime Meridian">
+                🌐
+            </button>
+
+            <button id="myLocationButton" class="orbit-map-button" title="My Location" aria-label="My Location">
+                <svg viewBox="0 0 24 24" width="25" height="25" aria-hidden="true" style="display:block;">
+                    <path d="M3.5 10.5 L12 3.5 L20.5 10.5 V20 H14.8 V14.5 H9.2 V20 H3.5 Z"
+                          fill="none" stroke="#54b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <button id="setMyLocationButton" class="orbit-map-button" title="Set Home" aria-label="Set Home">
+                📍
+            </button>
+        </div>
+    </div>
+
+    <div id="clockdiv">
+        <div id="dateDisplay"></div>
+        <div id="timeDisplay"></div>
+    </div>
+
+</div>
+
+
+    <!-- Christmas Countdown Card -->
+    <div id="christmasCountdownCard" style="display:none;">
+
+
+<div id="christmasLights">
+
+<svg id="christmasWire"
+     fill="none"
+     viewBox="0 0 1000 800"
+     preserveAspectRatio="none"
+     style="position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:visible; pointer-events:none;"
+     aria-hidden="true">
+    <path
+        d="M 45,106
+Q 85,124 125,112
+Q 170,110 215,112
+Q 260,118 305,112
+Q 350,96 395,112
+Q 440,106 485,112
+Q 530,85 575,112
+Q 620,115 665,112
+Q 710,116 755,112
+Q 800,128 845,112
+Q 890,96 935,112
+C 994,115 999,155 1004,195
+Q 975,230 990,275
+Q 1005,310 990,355
+Q 975,390 990,435
+Q 1005,470 990,515
+Q 975,550 990,595
+C 1005,650 995,685 930,702
+Q 885,716 840,702
+Q 795,688 750,702
+Q 705,716 660,702
+Q 615,688 570,702
+Q 525,716 480,702
+Q 435,688 390,702
+Q 345,716 300,702
+Q 255,688 210,702
+Q 165,716 120,702
+Q 75,688 45,702
+C -5,670 -10,635 5,595
+Q 20,555 5,515
+Q -10,475 5,435
+Q 20,395 5,355
+Q -10,315 5,275
+Q 20,235 5,195
+C -10,155 -5,120 45,112
+        fill="none"
+        stroke="#20251b"
+        stroke-width="5"
+        stroke-linecap="round"
+        stroke-linejoin="round" />
+</svg>
+
+
+    <!-- TOP: bulbs generally point down toward the plaque -->
+<span class="christmasBulb red"    style="top:calc(14% + 1px); left:calc(4% + 14px); transform:rotate(335deg);"></span>
+<span class="christmasBulb yellow" style="top:calc(14% + 5px); left:15%; transform:rotate(345deg);"></span>
+<span class="christmasBulb green"  style="top:calc(14% + 2px); left:26%; transform:rotate(10deg);"></span>
+<span class="christmasBulb blue"   style="top:calc(14% + 1px); left:37%; transform:rotate(350deg);"></span>
+<span class="christmasBulb red"    style="top:calc(14% + 3px); left:48%;"></span>
+<span class="christmasBulb yellow" style="top:calc(14% + 2px); left:59%; transform:rotate(10deg);"></span>
+<span class="christmasBulb green"  style="top:calc(14% + 6px); left:70%; transform:rotate(350deg);"></span>
+<span class="christmasBulb blue"   style="top:calc(14% + 3px); left:81%; transform:rotate(15deg);"></span>
+<span class="christmasBulb red"    style="top:calc(14% + 2px); left:calc(92% - 16px); transform:rotate(25deg);"></span>
+
+    <!-- BOTTOM: bulbs generally point up toward the plaque -->
+<span class="christmasBulb blue"   style="bottom:calc(13% + 4px); left:7%; transform:rotate(203deg);"></span>
+<span class="christmasBulb green"  style="bottom:calc(13% + 6px); left:16%; transform:rotate(190deg);"></span>
+<span class="christmasBulb yellow" style="bottom:calc(13% + 4px); left:26%; transform:rotate(170deg);"></span>
+<span class="christmasBulb red"    style="bottom:calc(13% + 3px); left:37%; transform:rotate(185deg);"></span>
+<span class="christmasBulb blue"   style="bottom:calc(13% + 5px); left:48%; transform:rotate(180deg);"></span>
+<span class="christmasBulb green"  style="bottom:calc(13% + 3px); left:59%; transform:rotate(175deg);"></span>
+<span class="christmasBulb yellow" style="bottom:calc(13% + 7px); left:70%; transform:rotate(190deg);"></span>
+<span class="christmasBulb red"    style="bottom:calc(13% + 3px); left:80%; transform:rotate(170deg);"></span>
+<span class="christmasBulb blue"   style="bottom:calc(13% + 4px); left:calc(92% - 20px); transform:rotate(135deg);"></span>
+
+    <!-- LEFT: bulbs point inward, toward the right -->
+    <span class="christmasBulb green"  style="left:8px; top:20%; transform:rotate(275deg);"></span>
+    <span class="christmasBulb yellow" style="left:14px; top:31%; transform:rotate(265deg);"></span>
+    <span class="christmasBulb red"    style="left:10px; top:42%; transform:rotate(280deg);"></span>
+    <span class="christmasBulb blue"   style="left:9px; top:53%; transform:rotate(260deg);"></span>
+    <span class="christmasBulb green"  style="left:15px; top:64%; transform:rotate(275deg);"></span>
+    <span class="christmasBulb yellow" style="left:7px; top:75%; transform:rotate(285deg);"></span>
+
+    <!-- RIGHT: bulbs point inward, toward the left -->
+    <span class="christmasBulb yellow" style="right:7px; top:20%; transform:rotate(85deg);"></span>
+    <span class="christmasBulb green"  style="right:14px; top:31%; transform:rotate(95deg);"></span>
+    <span class="christmasBulb blue"   style="right:16px; top:42%; transform:rotate(80deg);"></span>
+    <span class="christmasBulb red"    style="right:10px; top:53%; transform:rotate(100deg);"></span>
+    <span class="christmasBulb yellow" style="right:15px; top:64%; transform:rotate(85deg);"></span>
+    <span class="christmasBulb green"  style="right:9px; top:75%; transform:rotate(75deg);"></span>
+</div>
+
+
+
+<div id="christmasPlaque">
+
+    <div id="christmasDecorationLeft">
+        <svg viewBox="0 0 100 120"
+             width="90" height="110"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+
+            <!-- Holly branch -->
+            <path d="M18 103 Q45 70 76 18"
+                  fill="none" stroke="#725036"
+                  stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Deep green holly leaves -->
+            <path d="M42 72
+                     L25 70 L17 58 L28 59
+                     L22 44 L39 52 L48 38
+                     L51 55 L63 48 L58 65
+                     L47 72 Z"
+                  fill="#245b35" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <path d="M58 43
+                     L57 28 L69 33 L73 17
+                     L81 31 L93 25 L87 42
+                     L95 47 L79 51 L74 62
+                     L66 49 Z"
+                  fill="#326c3c" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <path d="M29 89
+                     L15 88 L7 76 L20 78
+                     L13 64 L29 71 L37 60
+                     L40 76 L51 70 L46 85
+                     L36 92 Z"
+                  fill="#1d4d2d" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <!-- Leaf veins -->
+            <g fill="none" stroke="#78945a"
+               stroke-width="1.2" opacity="0.85">
+                <path d="M26 64 L45 64 L48 48"/>
+                <path d="M70 45 L77 35 L82 29"/>
+                <path d="M17 82 L34 82 L37 69"/>
+            </g>
+
+            <!-- Glossy red berries -->
+            <g stroke="#681c20" stroke-width="1.2">
+                <circle cx="55" cy="76" r="8" fill="#b51f2b"/>
+                <circle cx="69" cy="73" r="8" fill="#d22c32"/>
+                <circle cx="63" cy="87" r="8" fill="#a81724"/>
+                <circle cx="78" cy="85" r="7" fill="#c9232e"/>
+            </g>
+
+            <!-- Tiny berry highlights -->
+            <g fill="#ffd5b0" opacity="0.8">
+                <circle cx="52" cy="73" r="2"/>
+                <circle cx="66" cy="70" r="2"/>
+                <circle cx="60" cy="84" r="2"/>
+                <circle cx="76" cy="82" r="1.8"/>
+            </g>
+        </svg>
+    </div>
+
+    <div id="christmasDecorationRight">
+        <svg viewBox="0 0 100 120"
+             width="90" height="110"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true"
+             style="transform:scaleX(-1);">
+
+            <!-- Holly branch -->
+            <path d="M18 103 Q45 70 76 18"
+                  fill="none" stroke="#725036"
+                  stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Deep green holly leaves -->
+            <path d="M42 72
+                     L25 70 L17 58 L28 59
+                     L22 44 L39 52 L48 38
+                     L51 55 L63 48 L58 65
+                     L47 72 Z"
+                  fill="#245b35" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <path d="M58 43
+                     L57 28 L69 33 L73 17
+                     L81 31 L93 25 L87 42
+                     L95 47 L79 51 L74 62
+                     L66 49 Z"
+                  fill="#326c3c" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <path d="M29 89
+                     L15 88 L7 76 L20 78
+                     L13 64 L29 71 L37 60
+                     L40 76 L51 70 L46 85
+                     L36 92 Z"
+                  fill="#1d4d2d" stroke="#153c25"
+                  stroke-width="1.5" stroke-linejoin="round"/>
+
+            <!-- Leaf veins -->
+            <g fill="none" stroke="#78945a"
+               stroke-width="1.2" opacity="0.85">
+                <path d="M26 64 L45 64 L48 48"/>
+                <path d="M70 45 L77 35 L82 29"/>
+                <path d="M17 82 L34 82 L37 69"/>
+            </g>
+
+            <!-- Glossy red berries -->
+            <g stroke="#681c20" stroke-width="1.2">
+                <circle cx="55" cy="76" r="8" fill="#b51f2b"/>
+                <circle cx="69" cy="73" r="8" fill="#d22c32"/>
+                <circle cx="63" cy="87" r="8" fill="#a81724"/>
+                <circle cx="78" cy="85" r="7" fill="#c9232e"/>
+            </g>
+
+            <!-- Tiny berry highlights -->
+            <g fill="#ffd5b0" opacity="0.8">
+                <circle cx="52" cy="73" r="2"/>
+                <circle cx="66" cy="70" r="2"/>
+                <circle cx="60" cy="84" r="2"/>
+                <circle cx="76" cy="82" r="1.8"/>
+            </g>
+        </svg>
+    </div>
+
+
+    <div id="christmasHeading">Days ’til Xmas</div>
+
+    <div id="christmasDigits">
+        <span class="christmasDigit">0</span>
+        <span class="christmasDigit">6</span>
+        <span class="christmasDigit">5</span>
+    </div>
+</div>
+
+</div>  <!-- End of Christmas Countdown Card -->
+
+<div id="newsCard" style="display:none;">
+
+
+ <div id="newsSource">
+
+    <span id="newsOrganization">NPR</span>
+
+    <div id="storyNavigation">
+
+        <button id="previousStory"
+            onclick="previousStory()">
+            ◀
+        </button>
+
+        <button id="nextStory"
+            onclick="nextStory()">
+            ▶
+        </button>
+
+    </div>
+
+    <span id="newsSection">NEWS</span>
+
+</div>
+
+        <img
+            id="storyPhoto"
+            alt="News photo"
+        >
+
+        <div id="newsHeadline">
+            Loading news...
+        </div>
+
+
+<div id="newsExcerpt"></div>
+
+<div id="storyFooter">
+    <div id="storyNumber"></div>
+    <div id="storyDate"></div>
+</div>
+
+<div id="newsStatus"></div>
+
+
+    </div>
+
+
+    <button
+        id="previousSection"
+        class="sectionNavigation"
+        aria-label="Previous section"
+        title="Previous section"
+    >
+        <span class="sectionBar" aria-hidden="true"></span><span class="sectionArrow">‹</span>
+    </button>
+
+    <button
+        id="previousCard"
+        class="orbitNavigation"
+        aria-label="Previous story or card"
+        title="Previous story or card"
+    >
+        ‹
+    </button>
+
+    <button
+        id="nextCard"
+        class="orbitNavigation"
+        aria-label="Next story or card"
+        title="Next story or card"
+    >
+        ›
+    </button>
+
+    <button
+        id="nextSection"
+        class="sectionNavigation"
+        aria-label="Next section"
+        title="Next section"
+    >
+        <span class="sectionArrow">›</span><span class="sectionBar" aria-hidden="true"></span>
+    </button>
+
+</div>
+
+
+<script>
+window.initializeOrbitDayNightMap = function() {
+  if (window.orbitDayNightMapInitialized) {
+    return;
+  }
+  window.orbitDayNightMapInitialized = true;
+
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("chartdiv");
+
+// Move the amCharts logo to the upper-left corner
+root._logo.setAll({
+  x: 0,
+  y: 0,
+  centerX: 0,
+  centerY: 0
+});
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root),
+  am5themes_Material.new(root),
+  am5themes_Responsive.new(root)
+]);
+
+var myLocationRotationX = localStorage.getItem("orbitMyLocation");
+
+if (myLocationRotationX === null) {
+  myLocationRotationX = 97.7431;
+} else {
+  myLocationRotationX = Number(myLocationRotationX);
+}
+
+// Create the map chart
+// https://www.amcharts.com/docs/v5/charts/map-chart/
+var chart = root.container.children.push(am5map.MapChart.new(root, {
+  // go to the home view once the map is fitted
+  autoHome: true,
+homeRotationX: myLocationRotationX,
+  // dragging sideways turns the world around, dragging up and down moves it
+  panX: "rotateX",
+  panY: "translateY",
+  // how far the map may be dragged out of view: not at all
+  maxPanOut: 0,
+  minZoomLevel: 0.5,                  // zoom out to half the fitted size at most
+  projection: am5map.geoEqualEarth(), // the Equal Earth projection
+  // near-black space behind the satellite pictures, shown only with them
+  background: am5.Rectangle.new(root, {
+    fill: am5.color(0x789bb9), // lighter ocean color makes the night shadow easier to see
+    fillOpacity: 1
+  })
+}));
+
+
+document.getElementById("primeMeridianButton").addEventListener("click", function() {
+  chart.rotate(0, 0, 1200);
+});
+
+document.getElementById("myLocationButton").addEventListener("click", function() {
+  chart.rotate(myLocationRotationX, 0, 1200);
+});
+
+document.getElementById("setMyLocationButton").addEventListener("click", function() {
+  myLocationRotationX = chart.get("rotationX");
+  localStorage.setItem("orbitMyLocation", myLocationRotationX);
+  alert("My Location has been saved!");
+});
+
+
+
+
+
+// Satellite view: NASA's pictures of the Earth, by day where the sun is up and city lights where it is night,
+// blended across the twilight, under the countries. Hidden at first (visible: false). The images are read from
+// the amCharts CDN
+// https://www.amcharts.com/docs/v5/charts/map-chart/map-raster-series/
+var satelliteSeries = chart.series.push(am5map.MapRasterSeries.new(root, {
+  src: "https://cdn.amcharts.com/lib/5/geodata/images/earthDay2048.jpg", // the Earth by day...
+  // ...and its city lights by night
+  nightSrc: "https://cdn.amcharts.com/lib/5/geodata/images/earthNight2048.jpg",
+  sunDate: "now", // split between day and night for the current time
+  visible: false
+}));
+
+// Create main polygon series for countries
+// https://www.amcharts.com/docs/v5/charts/map-chart/map-polygon-series/
+var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+  geoJSON: am5geodata_worldLow // low-detail world countries
+}));
+
+polygonSeries.mapPolygons.template.setAll({
+  fill: am5.color(0xdce7f0), // pale land against the blue ocean
+  stroke: am5.color(0x506b83),
+  strokeWidth: 0.5,     // thin borders
+  tooltipText: "{name}" // the country's name
+});
+
+// The image credit
+var credit = chart.children.push(am5.Label.new(root, {
+  text: "Imagery: NASA Earth Observatory",
+  fontSize: 12,              // 12px text
+  fill: am5.color(0xffffff), // white, over the dark pictures
+  fillOpacity: 0.6,
+  x: am5.p100,               // at the right edge...
+  centerX: am5.p100,         // ...measured from the label's right end...
+  dx: -10,                   // ...10px in from it
+  y: 10,                     // 10px from the top
+  visible: false             // shown with the satellite view only
+}));
+
+// The countries' own look, to go back to
+var landTemplate = polygonSeries.mapPolygons.template;
+var landLook = {
+  fill: am5.color(0xdce7f0),
+  fillOpacity: 1,
+  stroke: am5.color(0x506b83),
+  strokeOpacity: 1
+};
+
+// The image credit shows with the pictures, the countries turn to white outlines over them, the grid lines turn
+// white, and the map then sits in near-black space, with white text
+satelliteSeries.on("visible", function (visible) {
+  credit.set("visible", visible);
+  chart.get("background").setAll({
+    fill: visible ? am5.color(0x101318) : am5.color(0x789bb9),
+    fillOpacity: 1
+  });
+  landTemplate.setAll(visible ? { fillOpacity: 0, stroke: am5.color(0xffffff), strokeOpacity: 0.6 } : landLook);
+  graticuleSeries.mapLines.template.set("stroke", visible ? am5.color(0xffffff) : root.interfaceColors.get("alternativeBackground"));
+  timeLabel.set("fill", visible ? am5.color(0xffffff) : root.interfaceColors.get("text"));
+});
+
+// Create night series: it shades the part of the world where it is night,
+// with the twilight in steps, and shows the sun where it is directly overhead.
+// With sunDate "now" it keeps moving with the clock.
+var nightSeries = chart.series.push(am5map.NightSeries.new(root, {
+  sunDate: "now"
+}));
+
+// How dark the full night gets
+nightSeries.mapPolygons.template.setAll({
+  fillOpacity: 0.62 // slightly darker night shadow against the lighter ocean
+});
+
+// A bigger sun than the default
+nightSeries.get("sun").setAll({
+  radius: 12, // a 12px sun
+  tooltipText: "The sun is directly overhead here" // shown when the sun is hovered
+});
+
+// Create graticule series: grid lines every 10 degrees, over the map
+// https://www.amcharts.com/docs/v5/charts/map-chart/graticule-series/
+var graticuleSeries = chart.series.push(am5map.GraticuleSeries.new(root, {
+  step: 10
+}));
+
+graticuleSeries.mapLines.template.setAll({
+  stroke: root.interfaceColors.get("alternativeBackground"), // a color that contrasts with the background...
+  strokeOpacity: 0.1 // ...faint
+});
+
+// The moon: where it is overhead at the time, drawn in its phase, with the phase in a tooltip
+// https://www.amcharts.com/docs/v5/charts/map-chart/map-point-series/
+var moonSeries = chart.series.push(am5map.MapPointSeries.new(root, {}));
+var moonRadius = 10; // the moon's radius in pixels
+
+// Templates, so a new phase and tooltip reach the moon in one place
+var moonTemplate = am5.Template.new({});
+var moonLitTemplate = am5.Template.new({});
+
+moonSeries.bullets.push(function() {
+  var container = am5.Container.new(root, {});
+
+  // The dark side, which also shows the tooltip
+  container.children.push(am5.Circle.new(root, {
+    radius: moonRadius,
+    fill: am5.color(0x3a3e48),   // dark gray...
+    stroke: am5.color(0xb8bcc6), // ...with a light rim
+    strokeWidth: 1,
+    tooltipY: -moonRadius        // the tooltip points at the moon's top edge
+  }, moonTemplate));
+
+  // The lit side, drawn for the phase
+  container.children.push(am5.Graphics.new(root, {
+    fill: am5.color(0xf4f2ea) // off-white
+  }, moonLitTemplate));
+
+  return am5.Bullet.new(root, {
+    sprite: container
+  });
+});
+
+var moonItem = moonSeries.pushDataItem({ latitude: 0, longitude: 0 }); // one point; updateMoon moves it
+
+// The lit part of the moon at a phase from 0 (new) through 0.5 (full) to 1 (new again): a half circle, closed by
+// the half ellipse of the line between its day and night. Waxing, the right side is lit, as seen from the north
+function drawMoon(display, r, phase) {
+  if (phase < 0.005 || phase > 0.995) {
+    return; // a new moon: nothing lit
+  }
+  var k = 0.5523; // bezier curves close to a quarter circle
+  // how far the day-night line bulges, and to which side
+  var edge = Math.cos(phase * 2 * Math.PI) * r * (phase <= 0.5 ? 1 : -1);
+  display.moveTo(0, -r); // start at the top
+  // the lit half circle: the right side while waxing, the left side after
+  display.arc(0, 0, r, -Math.PI / 2, Math.PI / 2, phase > 0.5);
+  display.bezierCurveTo(edge * k, r, edge, r * k, edge, 0); // then back up along the day-night line
+  display.bezierCurveTo(edge, -r * k, edge * k, -r, 0, -r);
+}
+
+// The point where the moon is overhead at a time, from the main terms of its orbit
+function getMoonPosition(date) {
+  var rad = Math.PI / 180;
+  var days = date.getTime() / 86400000 - 10957.5; // since 1 January 2000, noon
+  var t = days / 36525; // centuries since 2000
+  var Lp = 218.3165 + 481267.8813 * t; // mean longitude
+  var Mp = (134.9634 + 477198.8676 * t) * rad; // mean anomaly
+  var D = (297.8502 + 445267.1115 * t) * rad; // mean elongation
+  var M = (357.5291 + 35999.0503 * t) * rad; // the sun's mean anomaly
+  var F = (93.272 + 483202.0175 * t) * rad; // argument of latitude
+  // the moon's longitude along the sun's path, in radians...
+  var lon = (Lp + 6.289 * Math.sin(Mp) + 1.274 * Math.sin(2 * D - Mp) + 0.658 * Math.sin(2 * D) + 0.214 * Math.sin(2 * Mp) -
+    0.186 * Math.sin(M) - 0.114 * Math.sin(2 * F)) * rad;
+  // ...and its latitude above or below that path
+  var lat = (5.128 * Math.sin(F) + 0.281 * Math.sin(Mp + F) + 0.278 * Math.sin(Mp - F) + 0.173 * Math.sin(2 * D - F)) * rad;
+  // from the ecliptic to the sky, then to the turning Earth
+  var tilt = (23.439 - 0.013 * t) * rad;
+  // right ascension: the moon's place on the sky's east-west circle
+  var ra = Math.atan2(Math.cos(tilt) * Math.sin(lon) * Math.cos(lat) - Math.sin(tilt) * Math.sin(lat), Math.cos(lon) * Math.cos(lat));
+  // declination: the latitude where the moon is overhead
+  var dec = Math.asin(Math.sin(tilt) * Math.sin(lon) * Math.cos(lat) + Math.cos(tilt) * Math.sin(lat));
+  var siderealTime = 280.46061837 + 360.98564736629 * days; // how far the Earth has turned, in degrees
+  // the longitude where the moon is overhead, -180 to 180
+  var longitude = ((ra / rad - siderealTime) % 360 + 540) % 360 - 180;
+  return { latitude: dec / rad, longitude: longitude };
+}
+
+// eight names, from new moon round to waning crescent
+var moonPhases = ["New moon", "Waxing crescent", "First quarter", "Waxing gibbous", "Full moon", "Waning gibbous", "Last quarter", "Waning crescent"];
+
+// Put the moon where it is overhead at a time, and draw its phase. The angle between the points under the sun and
+// under the moon is the angle between the two, seen from the Earth
+function updateMoon(date) {
+  var rad = Math.PI / 180;
+  var moon = getMoonPosition(date);
+  var sun = am5map.getSunPosition(date);
+  moonItem.setAll({ latitude: moon.latitude, longitude: moon.longitude }); // move the moon's point
+  var cos = Math.sin(sun.latitude * rad) * Math.sin(moon.latitude * rad) +
+    Math.cos(sun.latitude * rad) * Math.cos(moon.latitude * rad) * Math.cos((moon.longitude - sun.longitude) * rad);
+  var angle = Math.acos(Math.max(-1, Math.min(1, cos))) / rad;             // in degrees
+  // waxing while the moon is east of the sun
+  var waxing = (moon.longitude - sun.longitude + 360) % 360 < 180;
+  var phase = (waxing ? angle : 360 - angle) / 360; // 0 to 1, from new moon to new moon
+  moonLitTemplate.set("draw", function(display) {   // redraw the lit part
+    drawMoon(display, moonRadius, phase);
+  });
+  // the phase name in bold, then how much of the moon is lit
+  moonTemplate.set("tooltipText", "[bold]" + moonPhases[Math.round(phase * 8) % 8] + "[/]\n" + Math.round((1 - cos) / 2 * 100) + "% lit");
+}
+
+// Add zoom control
+// https://www.amcharts.com/docs/v5/charts/map-chart/map-pan-zoom/#Zoom_control
+var zoomControl = chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+
+// Show the built-in home button as a third control to restore the map's fitted view.
+zoomControl.homeButton.set("visible", true);
+
+
+ // Replace the built-in house with a circular reload arrow.
+zoomControl.homeButton.set("icon", am5.Graphics.new(root, {
+  svgPath: "M17.65 6.35 C16.2 4.9 14.21 4 12 4 C7.58 4 4 7.58 4 12 S7.58 20 12 20 C15.73 20 18.84 17.45 19.73 14 H17.65 C16.83 16.33 14.61 18 12 18 C8.69 18 6 15.31 6 12 S8.69 6 12 6 C13.66 6 15.14 6.69 16.22 7.78 L13 11 H20 V4 L17.65 6.35 Z",
+  fill: am5.color(0xe9f4ff),
+  width: 22,
+  height: 22
+}));
+
+
+
+ // Style the zoom-in, zoom-out, and reset buttons
+[zoomControl.plusButton, zoomControl.minusButton, zoomControl.homeButton].forEach(function(button) {
+  button.setAll({
+width: 44,
+height: 44,
+marginRight: 4,
+marginLeft: 4
+  });
+
+  button.get("background").setAll({
+    fill: am5.color(0x17283a),
+    fillOpacity: 0.92,
+    stroke: am5.color(0x456078),
+    strokeOpacity: 1,
+    cornerRadiusTL: 8,
+    cornerRadiusTR: 8,
+    cornerRadiusBL: 8,
+    cornerRadiusBR: 8
+  });
+
+  button.get("background").states.create("hover", {}).setAll({
+    fill: am5.color(0x29445e),
+    stroke: am5.color(0x7899b5)
+  });
+
+  button.get("background").states.create("down", {}).setAll({
+    fill: am5.color(0x29445e)
+  });
+});
+
+
+
+zoomControl.set("x", 8);
+zoomControl.set("centerX", 0);
+zoomControl.set("y", am5.percent(100));
+zoomControl.set("centerY", am5.percent(100));
+zoomControl.set("dy", -8);
+
+
+
+
+// Arrange the zoom buttons horizontally
+zoomControl.set("layout", root.horizontalLayout);
+
+
+
+
+
+
+
+
+// The time on the map: now, or a chosen date and time, moved by up to a day either way (hours)
+var baseTime = new Date().getTime();
+var dateChosen = false; // true once a date is picked
+var hours = 0;          // the shift from baseTime
+
+// The time shown, at the bottom left
+
+var dateDisplay = document.getElementById("dateDisplay");
+var timeDisplay = document.getElementById("timeDisplay");
+
+
+// Move the night, the sun, the moon and the satellite pictures to the time, and show it
+function updateDayNight() {
+  var time = baseTime + hours * am5.time.getDuration("hour");
+  // the time now: the night keeps up with the clock by itself
+  var sunDate = hours == 0 && !dateChosen ? "now" : time;
+  nightSeries.set("sunDate", sunDate);     // the night shade...
+  satelliteSeries.set("sunDate", sunDate); // ...and the pictures follow the same time
+  updateMoon(new Date(time));
+  // like Oct 07 2026 14:30
+
+var displayDate = new Date(time);
+dateDisplay.textContent = root.dateFormatter.format(displayDate, "EEEE, MMMM dd, yyyy");
+timeDisplay.textContent = root.dateFormatter.format(displayDate, "h:mm a");
+
+}
+
+updateDayNight();
+
+// Keep the clock running: unless a date was chosen, the time moves on every minute
+setInterval(function() {
+  if (!dateChosen) {
+    baseTime = new Date().getTime();
+    updateDayNight();
+  }
+}, 60000);
+
+// Make stuff animate on load
+// https://www.amcharts.com/docs/v5/concepts/animations/
+chart.appear(1000, 100);
+}; // end initializeOrbitDayNightMap
+</script>
+</script>
+
+<script>
+
+const CLOCK_TIME = 10000;
+const WEATHER_TIME = 10000;
+const STORY_TIME = 10000;
+const MAP_TIME = 15000; // 15 seconds for the Day/Night Map
+
+// Current weather reading, shared with the Section Cards
+let orbitTemperature = "--°";
+let orbitWeatherDescription = "Loading weather...";
+let orbitWeatherIcon = "🌤️";
+
+let newsStories = [];
+let currentStory = 0;
+
+let currentOrbitCard = 0;
+let orbitRunId = 0;
+
+// 1. Define your 30 feeds grouped by category and header color
+const categories = [
+    {
+        name: "NEWS",
+        color: "#1b365d", // Navy Blue
+        feeds: [
+            { id: "bbc", source: "BBC", url: "https://feeds.bbci.co.uk/news/world/rss.xml", storyCount: 5 },
+            { id: "nyt-top", source: "THE NEW YORK TIMES", url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml", storyCount: 5 },
+            { id: "the-guardian", source: "THE GUARDIAN", url: "http://www.theguardian.com/world/usa/rss", storyCount: 5 },
+            { id: "abc-news", source: "ABC NEWS", url: "https://abcnews.go.com/abcnews/topstories", storyCount: 5 },
+            { id: "nbc", source: "NBC", url: "https://feeds.nbcnews.com/nbcnews/public/news", storyCount: 5 }
+        ]
+    },
+    {
+        name: "ENTERTAINMENT",
+        color: "#11999e", // Green Blue
+        feeds: [
+            { id: "slashfillm", source: "SLASH FILM", url: "https://www.slashfilm.com/feed/", storyCount: 5 },
+            { id: "variety", source: "VARIETY", url: "http://variety.com/feed/", storyCount: 5 },
+            { id: "gizmodo", source: "GIZMODO", url: "https://gizmodo.com/rss", storyCount: 5 },
+            { id: "screen-rant", source: "SCREEN RANT", url: "http://feeds.feedburner.com/ScreenRant", storyCount: 5 },
+            { id: "the-onion", source: "THE ONION", url: "https://www.theonion.com/rss", storyCount: 5 }
+        ]
+    },
+    {
+        name: "POLITICS",
+        color: "#2a52be", // Medium Blue
+        feeds: [
+            { id: "the-hill", source: "THE HILL", url: "https://thehill.com/rss/syndicator/19109/", storyCount: 5 },
+            { id: "politico", source: "POLITICO", url: "https://rss.politico.com/politics-news.xml", storyCount: 5 },
+            { id: "axios", source: "AXIOS", url: "https://www.axios.com/feeds/feed.rss", storyCount: 5 },
+            { id: "wsj-politics", source: "WSJ POLITICS", url: "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed", storyCount: 5 },
+            { id: "nyt-pol", source: "NEW YORK TIMES", url: "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml", storyCount: 5 }
+        ]
+    },
+    {
+        name: "SPORTS",
+        color: "#c9151d", // Red
+        feeds: [
+            { id: "fox-sports", source: "FOX SPORTS", url: "https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&aggregateId=7f83e8ca-6701-5ea0-96ee-072636b67336", storyCount: 5 },
+            { id: "cbs-sports", source: "CBS SPORTS", url: "https://www.cbssports.com/rss/headlines/", storyCount: 5 },
+            { id: "bleacher-report", source: "BLEACHER REPORT", url: "https://feeds.bleacherreport.com/articles", storyCount: 5 },
+            { id: "awful-announcing", source: "AWFUL ANNOUNCING", url: "http://www.awfulannouncing.com/feed/rss.html", storyCount: 5 },
+            { id: "defector", source: "DEFECTOR", url: "https://defector.com/feed/", storyCount: 5 }
+        ]
+    },
+    {
+        name: "TECHNOLOGY",
+        color: "#5b32a8", // Bluish Purple
+        feeds: [
+            { id: "ars", source: "ARS TECHNICA", url: "https://feeds.arstechnica.com/arstechnica/index", storyCount: 5 },
+            { id: "tech-radar", source: "TECH RADAR", url: "https://www.techradar.com/rss", storyCount: 5 },
+            { id: "wired", source: "WIRED", url: "https://www.wired.com/feed/rss", storyCount: 5 },
+            { id: "futurism", source: "FUTURISM", url: "https://futurism.com/feed", storyCount: 5 },
+            { id: "nyt-tech", source: "NEW YORK TIMES", url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", storyCount: 5 }
+        ]
+    },
+    {
+        name: "BUSINESS",
+        color: "#1e5631", // Hunter Green
+        feeds: [
+            { id: "bbc-news", source: "BBC NEWS", url: "http://feeds.bbci.co.uk/news/business/rss.xml", storyCount: 5 },
+            { id: "market-watch", source: "MARKET WATCH", url: "https://feeds.content.dowjones.io/public/rss/mw_topstories", storyCount: 5 },
+            { id: "fortune", source: "FORTUNE", url: "https://fortune.com/feed", storyCount: 5 },
+            { id: "wsj", source: "WALL STREET JOURNAL", url: "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness", storyCount: 5 },
+            { id: "business-insider", source: "BUSINESS INSIDER", url: "https://www.businessinsider.com/rss", storyCount: 5 }
+        ]
+    }
+];
+
+// 2. Automatically build the flat feeds array and orbitCards deck programmatically
+let feeds = [];
+let orbitCards = [
+    {
+        id: "section-title",
+        name: "Weather & Sky Title",
+        sectionName: "WEATHER & SKY",
+        sectionColor: "#55AFFF"
+    },
+    { id: "weather", name: "Weather" },
+    { id: "sunrise-sunset", name: "Sunrise/Sunset" },
+    { id: "moon", name: "Moon" },
+    { id: "day-night-map", name: "Day/Night Map" },
+    { id: "christmas-countdown", name: "Christmas Countdown" }
+];
+
+let feedIndexCounter = 0;
+
+categories.forEach(cat => {
+    // Insert a Section Title Card before each category group
+    orbitCards.push({
+        id: "section-title",
+        name: cat.name + " Title",
+        sectionName: cat.name,
+        sectionColor: cat.color
+    });
+
+    // Add each feed into the master feeds list and card rotation
+    cat.feeds.forEach(feed => {
+        feeds.push({
+            id: feed.id,
+            source: feed.source,
+            section: cat.name,
+            url: feed.url,
+            color: cat.color,
+            storyCount: feed.storyCount
+        });
+
+        orbitCards.push({
+            id: feed.id,
+            name: feed.source,
+            feedIndex: feedIndexCounter++
+        });
+    });
+});
+
+
+function nextOrbitCard() {
+
+    currentOrbitCard++;
+
+    if (currentOrbitCard >= orbitCards.length) {
+        currentOrbitCard = 0;
+    }
+
+}
+
+function previousOrbitCard() {
+
+    currentOrbitCard--;
+
+    if (currentOrbitCard < 0) {
+        currentOrbitCard = orbitCards.length - 1;
+    }
+
+}
+
+function getCurrentOrbitCard() {
+
+    return orbitCards[currentOrbitCard];
+
+}
+
+async function showOrbitCard() {
+    const card = getCurrentOrbitCard();
+
+    // Hide all card containers first
+    document.getElementById("clockCard").style.display = "none";
+    document.getElementById("weatherCard").style.display = "none";
+    document.getElementById("sunriseSunsetCard").style.display = "none";
+    document.getElementById("moonCard").style.display = "none";
+    document.getElementById("dayNightMapCard").style.display = "none";
+    document.getElementById("christmasCountdownCard").style.display = "none";
+    document.getElementById("newsCard").style.display = "none";
+    document.getElementById("sectionTitleCard").style.display = "none";
+
+    if (card.id === "clock") {
+        document.getElementById("clockCard").style.display = "block";
+    }
+    if (card.id === "weather") {
+        document.getElementById("weatherCard").style.display = "block";
+        await getWeather();
+    }
+    if (card.id === "sunrise-sunset") {
+        document.getElementById("sunriseSunsetCard").style.display = "block";
+        await getSunriseSunset();
+    }
+    if (card.id === "moon") {
+        document.getElementById("moonCard").style.display = "block";
+        await getMoonData();
+    }
+    if (card.id === "day-night-map") {
+        document.getElementById("dayNightMapCard").style.display = "flex";
+        window.initializeOrbitDayNightMap();
+    }
+    if (card.id === "christmas-countdown") {
+        document.getElementById("christmasCountdownCard").style.display = "flex";
+        updateChristmasCountdown();
+        updateChristmasLighting();
+    }
+
+    if (card.id === "section-title") {
+        document.getElementById("sectionTitleCard").style.display = "block";
+        document.getElementById("sectionTitleHeader").textContent = card.sectionName;
+        document.getElementById("sectionTitleHeader").style.background = card.sectionColor;
+        
+        // Populate the live clock on the section title card
+        const now = new Date();
+        document.getElementById("sectionClockTime").textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        document.getElementById("sectionClockDate").textContent = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+// Show the latest saved weather reading on the Section Card
+document.getElementById("sectionWeather").textContent =
+    orbitWeatherIcon + "  " +
+    orbitTemperature + "  " +
+    orbitWeatherDescription;
+    }
+    if (card.feedIndex !== undefined) {
+        document.getElementById("newsCard").style.display = "block";
+        currentFeedIndex = card.feedIndex;
+        currentFeed = feeds[currentFeedIndex];
+        await getNews();
+    }
+}
+
+function updateChristmasCountdown() {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+
+    const christmas = new Date(currentYear, 11, 25);
+    const todayDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
+
+    if (todayDate > christmas) {
+        christmas.setFullYear(currentYear + 1);
+    }
+
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    const daysRemaining = Math.round(
+        (christmas - todayDate) / millisecondsPerDay
+    );
+
+    const digits = String(daysRemaining).padStart(3, "0");
+
+    const digitTiles = document.querySelectorAll(".christmasDigit");
+
+    digitTiles.forEach((tile, index) => {
+        tile.textContent = digits[index];
+    });
+}
+
+
+function updateChristmasLighting() {
+    const now = new Date();
+    const month = now.getMonth();
+    const hour = now.getHours();
+
+    const lights = document.getElementById("christmasLights");
+    const plaque = document.getElementById("christmasPlaque");
+
+    // Midnight through 5:59 AM: everything goes dark.
+    if (hour < 6) {
+        lights.classList.remove("lights-on", "lights-twinkle");
+        lights.classList.add("lights-off");
+        plaque.classList.add("plaque-dimmed");
+        return;
+    }
+
+    // The plaque returns to normal brightness after 6 AM.
+    plaque.classList.remove("plaque-dimmed");
+
+    // December: twinkle all day and evening.
+    if (month === 11) {
+        lights.classList.remove("lights-off", "lights-on");
+        lights.classList.add("lights-twinkle");
+    }
+
+    // Outside December: lights on steadily from 5 PM.
+    else if (hour >= 17) {
+        lights.classList.remove("lights-off", "lights-twinkle");
+        lights.classList.add("lights-on");
+    }
+
+    // Outside December during the daytime: lights off.
+    else {
+        lights.classList.remove("lights-on", "lights-twinkle");
+        lights.classList.add("lights-off");
+    }
+}
+setInterval(updateChristmasLighting, 30000);
+
+
+function getOrbitCardTime() {
+
+    const card = getCurrentOrbitCard();
+
+    if (card.id === "clock") {
+        return CLOCK_TIME;
+    }
+
+    if (card.id === "weather") {
+        return WEATHER_TIME;
+    }
+
+    if (card.id === "day-night-map") {
+        return MAP_TIME;
+    }
+
+    return STORY_TIME;
+
+}
+
+
+function updateSunriseSunsetVisual(progress) {
+
+    // Keep progress between 0 and 1.
+    progress = Math.max(0, Math.min(1, progress));
+
+    const sun = document.getElementById("sunriseSunsetSun");
+    const goldArc = document.getElementById("sunriseSunsetGoldArc");
+
+
+    // Before sunrise, hide the sun and reset the gold arc.
+    if (progress <= 0) {
+        sun.setAttribute("visibility", "hidden");
+        goldArc.setAttribute("stroke-dasharray", "0 100");
+        return;
+    }
+
+
+    // After sunset, hide the sun and reset the gold arc.
+    if (progress >= 1) {
+        sun.setAttribute("visibility", "hidden");
+        goldArc.setAttribute("stroke-dasharray", "0 100");
+        return;
+    }
+
+
+    // During daylight, show the sun.
+    sun.setAttribute("visibility", "visible");
+
+    // Position the sun along the semicircular arc.
+    const angle = Math.PI * (1 - progress);
+    const x = 300 + 230 * Math.cos(angle);
+    const y = 250 - 200 * Math.sin(angle);
+
+    sun.setAttribute("cx", x);
+    sun.setAttribute("cy", y);
+
+    // Reveal the gold portion up to the sun.
+    const goldPercent = progress * 100;
+    goldArc.setAttribute(
+        "stroke-dasharray",
+        goldPercent + " " + (100 - goldPercent)
+    );
+}
+
+
+function waitForOrbitCard() {
+
+    return new Promise(function(resolve) {
+
+        orbitCardTimerResolve = resolve;
+
+        orbitCardTimer = setTimeout(function() {
+
+            orbitCardTimer = null;
+            orbitCardTimerResolve = null;
+
+            resolve();
+
+        }, getOrbitCardTime());
+
+    });
+
+}
+
+async function runCurrentOrbitCard() {
+
+    const card = getCurrentOrbitCard();
+    const myOrbitRunId = orbitRunId;
+
+    await showOrbitCard();
+
+    if (myOrbitRunId !== orbitRunId) {
+        return;
+    }
+
+    if (card.feedIndex !== undefined) {
+
+        await runCurrentNewsCard(myOrbitRunId);
+
+        return;
+
+    }
+
+    await waitForOrbitCard();
+
+    if (myOrbitRunId !== orbitRunId) {
+        return;
+    }
+
+}
+
+async function testOneOrbitCard() {
+
+    await runCurrentOrbitCard();
+
+}
+
+async function testTwoOrbitCards() {
+
+    await runCurrentOrbitCard();
+
+    await moveToNextOrbitCard();
+
+    await runCurrentOrbitCard();
+
+}
+
+async function runCurrentNewsCard(myOrbitRunId) {
+    currentStory = 0;
+
+    if (newsStories.length === 0) {
+        await wait(STORY_TIME);
+        return;
+    }
+
+    while (currentStory < newsStories.length) {
+        if (myOrbitRunId !== orbitRunId) {
+            return;
+        }
+
+        showStory();
+        const storyBeingTimed = currentStory;
+
+        await waitForStory();
+
+        if (myOrbitRunId !== orbitRunId) {
+            return;
+        }
+
+        if (currentStory === storyBeingTimed) {
+            currentStory++;
+        }
+    }
+}
+
+async function testNewsOrbitCard() {
+    currentOrbitCard = 2;
+    await runCurrentOrbitCard();
+}
+
+async function testOrbitSequence() {
+
+    for (let i = 0; i < 3; i++) {
+
+        await runCurrentOrbitCard();
+
+        if (i < 2) {
+
+            await moveToNextOrbitCard();
+
+        }
+
+    }
+
+}
+
+function resetOrbitCardTimer() {
+
+    if (!orbitCardTimerResolve) return;
+
+    clearTimeout(orbitCardTimer);
+
+    orbitCardTimer = setTimeout(function() {
+
+        orbitCardTimer = null;
+
+        const resolve = orbitCardTimerResolve;
+
+        orbitCardTimerResolve = null;
+
+        resolve();
+
+    }, getOrbitCardTime());
+
+}
+
+let orbitCardTimer = null;
+let orbitCardTimerResolve = null;
+
+function cancelCurrentOrbitCard() {
+
+    // Mark the current card run as abandoned
+    orbitRunId++;
+
+    // Cancel an active Orbit Card timer
+    if (orbitCardTimerResolve) {
+        clearTimeout(orbitCardTimer);
+
+        const resolve = orbitCardTimerResolve;
+
+        orbitCardTimer = null;
+        orbitCardTimerResolve = null;
+
+        resolve();
+    }
+
+    // Cancel an active News story timer
+    if (storyTimerResolve) {
+        clearTimeout(storyTimer);
+
+        const resolve = storyTimerResolve;
+
+        storyTimer = null;
+        storyTimerResolve = null;
+
+        resolve();
+    }
+}
+
+async function moveToNextOrbitCard() {
+
+    cancelCurrentOrbitCard();
+
+    nextOrbitCard();
+
+    const card = getCurrentOrbitCard();
+
+    console.log("Moved to:", card.name);
+}
+
+
+async function moveToPreviousOrbitCard() {
+
+    cancelCurrentOrbitCard();
+
+    previousOrbitCard();
+
+    const card = getCurrentOrbitCard();
+
+    console.log("Moved to:", card.name);
+}
+
+
+function wait(milliseconds) {
+
+    return new Promise(
+        function(resolve) {
+            setTimeout(
+                resolve,
+                milliseconds
+            );
+        }
+    );
+
+}
+
+
+function updateClock() {
+
+    const now = new Date();
+
+    document.getElementById(
+        "clockTime"
+    ).textContent =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+    document.getElementById(
+        "clockDate"
+    ).textContent =
+        now.toLocaleDateString(
+            [],
+            {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+}
+
+
+setInterval(
+    updateClock,
+    1000
+);
+
+updateClock();
+
+
+
+function getWeatherDescription(code) {
+    if (code === 0) return "Clear";
+    if (code === 1) return "Mostly clear";
+    if (code === 2) return "Partly cloudy";
+    if (code === 3) return "Overcast";
+    if (code === 45 || code === 48) return "Fog";
+    if (code >= 51 && code <= 57) return "Drizzle";
+    if (code >= 61 && code <= 67) return "Rain";
+    if (code >= 71 && code <= 77) return "Snow";
+    if (code >= 80 && code <= 82) return "Showers";
+    if (code === 85 || code === 86) return "Snow showers";
+    if (code >= 95) return "Thunderstorm";
+    return "Cloudy";
+}
+
+function getWeatherIcon(code, isDay = true) {
+    if (code === 0) return isDay ? "☀️" : "🌙";
+    if (code === 1) return isDay ? "🌤️" : "🌙";
+    if (code === 2) return "⛅";
+    if (code === 3) return "☁️";
+    if (code === 45 || code === 48) return "🌫️";
+    if (code >= 51 && code <= 67) return "🌧️";
+    if (code >= 71 && code <= 77) return "❄️";
+    if (code >= 80 && code <= 82) return "🌦️";
+    if (code === 85 || code === 86) return "🌨️";
+    if (code >= 95) return "⛈️";
+    return "🌤️";
+}
+
+function getWindDirection(degrees) {
+    const directions = [
+        "N", "NE", "E", "SE",
+        "S", "SW", "W", "NW"
+    ];
+
+    return directions[
+        Math.round(degrees / 45) % 8
+    ];
+}
+
+async function getWeather() {
+    try {
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude=30.2672" +
+            "&longitude=-97.7431" +
+            "&current=temperature_2m,relative_humidity_2m," +
+            "apparent_temperature,is_day,weather_code," +
+            "pressure_msl,wind_speed_10m,wind_direction_10m" +
+            "&daily=weather_code,temperature_2m_max," +
+            "temperature_2m_min" +
+            "&temperature_unit=fahrenheit" +
+            "&wind_speed_unit=mph" +
+            "&timezone=America%2FChicago" +
+            "&forecast_days=6";
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Weather request failed");
+        }
+
+        const data = await response.json();
+        const current = data.current;
+        const daily = data.daily;
+
+// Save current conditions for the Section Cards
+orbitTemperature =
+    Math.round(current.temperature_2m) + "°";
+
+orbitWeatherDescription =
+    getWeatherDescription(current.weather_code);
+
+orbitWeatherIcon =
+    getWeatherIcon(
+        current.weather_code,
+        current.is_day === 1
+    );
+
+        // Current temperature and Real Feel
+        document.getElementById("weatherTemp").textContent =
+            Math.round(current.temperature_2m) + "°";
+
+        document.getElementById("weatherRealFeel").textContent =
+            "Real Feel " +
+            Math.round(current.apparent_temperature) + "°";
+
+        // Today's conditions and forecast high/low
+        document.getElementById("weatherTodayIcon").textContent =
+            getWeatherIcon(
+                current.weather_code,
+                current.is_day === 1
+            );
+
+        document.getElementById("weatherTodayDescription").textContent =
+            getWeatherDescription(current.weather_code);
+
+        document.getElementById("weatherTodayHighLow").innerHTML =
+            "HIGH " +
+            Math.round(daily.temperature_2m_max[0]) +
+            "°<br>LOW " +
+            Math.round(daily.temperature_2m_min[0]) + "°";
+
+        // Current wind, humidity, and barometric pressure
+        document.getElementById("weatherWind").textContent =
+            Math.round(current.wind_speed_10m) +
+            " mph " +
+            getWindDirection(current.wind_direction_10m);
+
+        document.getElementById("weatherHumidity").textContent =
+            Math.round(current.relative_humidity_2m) + "%";
+
+        // Convert pressure from hPa to inches of mercury.
+        document.getElementById("weatherPressure").textContent =
+            (current.pressure_msl / 33.8639).toFixed(2) +
+            " inHg";
+
+        // Fill the five forecast boxes, starting TOMORROW.
+        const forecastBoxes = document.querySelectorAll(
+            "#weatherForecast .weatherForecastDay"
+        );
+
+        forecastBoxes.forEach(function(box, index) {
+            const dayIndex = index + 1;
+
+            const date = new Date(
+                daily.time[dayIndex] + "T12:00:00"
+            );
+
+            const dayName = date.toLocaleDateString(
+                "en-US",
+                { weekday: "short" }
+            ).toUpperCase();
+
+            const code = daily.weather_code[dayIndex];
+
+            box.querySelector(".weatherForecastName").textContent =
+                dayName;
+
+            box.querySelector(".weatherForecastIcon").textContent =
+                getWeatherIcon(code);
+
+            box.querySelector(
+                ".weatherForecastDescription"
+            ).textContent = getWeatherDescription(code);
+
+            box.querySelector(".weatherForecastHigh").textContent =
+                Math.round(
+                    daily.temperature_2m_max[dayIndex]
+                ) + "°";
+
+            box.querySelector(".weatherForecastLow").textContent =
+                Math.round(
+                    daily.temperature_2m_min[dayIndex]
+                ) + "°";
+        });
+
+    } catch (error) {
+        console.error("Weather update failed:", error);
+
+        document.getElementById(
+            "weatherTodayDescription"
+        ).textContent = "Weather unavailable";
+    }
+}
+
+async function getSunriseSunset() {
+
+    try {
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude=30.2672" +
+            "&longitude=-97.7431" +
+            "&daily=sunrise,sunset" +
+            "&timezone=America%2FChicago" +
+            "&forecast_days=1";
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Sunrise/sunset request failed");
+        }
+
+        const data = await response.json();
+
+        const sunrise = new Date(data.daily.sunrise[0]);
+        const sunset = new Date(data.daily.sunset[0]);
+
+        const now = new Date();
+
+        const daylightLength = sunset - sunrise;
+        const elapsedDaylight = now - sunrise;
+
+let progress = elapsedDaylight / daylightLength;
+
+// After sunset, keep the visual in nighttime mode.
+if (now >= sunset) {
+    progress = 1;
+}
+
+updateSunriseSunsetVisual(progress);
+
+const sunriseText = sunrise.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit"
+});
+
+const sunsetText = sunset.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit"
+});
+
+document.getElementById("sunriseTimeValue").textContent =
+    sunriseText;
+
+document.getElementById("sunsetTimeValue").textContent =
+    sunsetText;
+
+const totalMinutes = Math.round(daylightLength / 60000);
+const hours = Math.floor(totalMinutes / 60);
+const minutes = totalMinutes % 60;
+
+document.getElementById("daylightDurationValue").textContent =
+    hours + "h " + String(minutes).padStart(2, "0") + "m";
+
+
+    } catch (error) {
+        console.error("Sunrise/sunset update failed:", error);
+
+        document.getElementById("sunriseSunsetMessage").textContent =
+            "Sunrise/sunset data unavailable";
+    }
+}
+
+
+async function getMoonData() {
+
+    try {
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude=30.2672" +
+            "&longitude=-97.7431" +
+            "&daily=moonrise,moonset,moon_phase" +
+            "&timezone=America%2FChicago" +
+            "&forecast_days=2";
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Moon data request failed");
+        }
+
+        const data = await response.json();
+
+        // Read today's Moon data.
+        const moonrise = data.daily.moonrise[0];
+        const moonset = data.daily.moonset[0];
+        const phase = data.daily.moon_phase[0];
+
+        updateMoonArc(moonrise, moonset);
+        updateMoonPhase(phase);
+
+
+        let phaseName;
+
+        if (phase < 0.03 || phase >= 0.97) {
+            phaseName = "New Moon";
+        } else if (phase < 0.22) {
+            phaseName = "Waxing Crescent";
+        } else if (phase < 0.28) {
+            phaseName = "First Quarter";
+        } else if (phase < 0.47) {
+            phaseName = "Waxing Gibbous";
+        } else if (phase < 0.53) {
+            phaseName = "Full Moon";
+        } else if (phase < 0.72) {
+            phaseName = "Waning Gibbous";
+        } else if (phase < 0.78) {
+            phaseName = "Last Quarter";
+        } else {
+            phaseName = "Waning Crescent";
+        }
+
+        document.getElementById("moonCurrentPhase").textContent =
+            phaseName;
+
+
+        // Convert a rise/set time into local display text.
+        function formatMoonTime(time) {
+            if (!time) {
+                return "No event";
+            }
+
+            return new Date(time).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit"
+            });
+        }
+
+        document.getElementById("moonriseValue").textContent =
+            formatMoonTime(moonrise);
+
+        document.getElementById("moonsetValue").textContent =
+            formatMoonTime(moonset);
+
+        // Convert lunar phase into illuminated percentage.
+        const illumination =
+            Math.round((1 - Math.cos(2 * Math.PI * phase)) * 50);
+
+        document.getElementById("moonIlluminationValue").textContent =
+            illumination + "%";
+
+
+        // Estimate upcoming New Moon and Full Moon dates.
+        // The Moon's average cycle is about 29.53 days.
+
+        const lunarCycle = 29.53059;
+        const currentPhase = phase % 1;
+
+        let daysUntilNew =
+            (1 - currentPhase) * lunarCycle;
+
+        let daysUntilFull =
+            ((0.5 - currentPhase + 1) % 1) * lunarCycle;
+
+        // If we are exactly at a phase, look for its next occurrence.
+        if (daysUntilNew < 0.01) {
+            daysUntilNew = lunarCycle;
+        }
+
+        if (daysUntilFull < 0.01) {
+            daysUntilFull = lunarCycle;
+        }
+
+        // Convert the estimated number of days into a calendar date.
+        function estimateMoonDate(daysAhead) {
+            const date = new Date();
+            date.setHours(12, 0, 0, 0);
+            date.setDate(
+                date.getDate() + Math.round(daysAhead)
+            );
+
+            return date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric"
+            });
+        }
+
+
+        // Display the estimated dates.
+        document.getElementById("nextNewMoonValue").textContent =
+            estimateMoonDate(daysUntilNew);
+
+        document.getElementById("nextFullMoonValue").textContent =
+            estimateMoonDate(daysUntilFull);
+
+        // Put the next lunar event first.
+        const newMoonRow =
+            document.getElementById("nextNewMoonRow");
+
+        const fullMoonRow =
+            document.getElementById("nextFullMoonRow");
+
+        if (daysUntilFull < daysUntilNew) {
+            fullMoonRow.parentNode.insertBefore(
+                fullMoonRow,
+                newMoonRow
+            );
+        } else {
+            newMoonRow.parentNode.insertBefore(
+                newMoonRow,
+                fullMoonRow
+            );
+        }
+
+
+        console.log("Moon data updated:", {
+            moonrise,
+            moonset,
+            phase,
+            illumination
+        });
+
+    } catch (error) {
+        console.error("Moon data update failed:", error);
+    }
+}
+
+function updateMoonArc(moonrise, moonset) {
+
+    const marker = document.getElementById("moonArcMarker");
+
+    const rise = new Date(moonrise);
+    const set = new Date(moonset);
+    const now = new Date();
+
+    // Account for a Moonset that occurs after midnight.
+    if (set <= rise) {
+        set.setDate(set.getDate() + 1);
+    }
+
+    // Calculate how far the Moon has traveled from rise to set.
+    let progress = (now - rise) / (set - rise);
+
+    // Keep the marker at the appropriate end when below the horizon.
+    progress = Math.max(0, Math.min(1, progress));
+
+
+    // Draw the silver trail behind the Moon.
+    const trail = document.getElementById("moonLitArc");
+
+    trail.setAttribute(
+        "stroke-dasharray",
+        (progress * 100) + " 100"
+    );
+
+    // Convert progress into a position along the curved arc.
+const angle = Math.PI * progress;
+
+console.log("Moon arc progress:", Math.round(progress * 100) + "%");
+    const x = 300 - 230 * Math.cos(angle);
+    const y = 250 - 200 * Math.sin(angle);
+
+    marker.setAttribute("cx", x);
+    marker.setAttribute("cy", y);
+
+marker.style.display =
+    (now >= rise && now < set) ? "block" : "none";
+
+}
+
+
+
+function updateMoonPhase(phase) {
+
+    const disk = document.getElementById("moonDisk");
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    // Keep the phase within one complete lunar cycle.
+    phase = ((phase % 1) + 1) % 1;
+
+    // Remove the previous shadow.
+    const oldShadow = document.getElementById("moonPhaseShadow");
+    if (oldShadow) {
+        oldShadow.remove();
+    }
+
+    // Calculate the illuminated fraction.
+    const illumination =
+        (1 - Math.cos(2 * Math.PI * phase)) / 2;
+
+    const r = 82;
+    const cx = 100;
+    const cy = 100;
+
+    const shadow = document.createElementNS(svgNS, "path");
+    shadow.setAttribute("id", "moonPhaseShadow");
+    shadow.setAttribute("fill", "#283344");
+    shadow.setAttribute("opacity", "0.75");
+
+    // New Moon: the entire disk is in shadow.
+    if (illumination < 0.005) {
+        shadow.setAttribute(
+            "d",
+            `M ${cx} ${cy - r} ` +
+            `A ${r} ${r} 0 1 0 ${cx} ${cy + r} ` +
+            `A ${r} ${r} 0 1 0 ${cx} ${cy - r} Z`
+        );
+        disk.appendChild(shadow);
+        return;
+    }
+
+    // Full Moon: no shadow is needed.
+    if (illumination >= 0.995) {
+        return;
+    }
+
+    // The shadow's curved edge narrows as the Moon
+    // moves toward either quarter phase.
+    const curveWidth =
+        Math.abs(1 - 2 * illumination) * r;
+
+    const waxing = phase < 0.5;
+
+    // Draw the outside edge on the shadowed side.
+    const outerSweep = waxing ? 0 : 1;
+
+    // Choose the curve direction for crescent or gibbous.
+    let innerSweep;
+
+    if (illumination < 0.5) {
+        innerSweep = waxing ? 0 : 1;
+    } else {
+        innerSweep = waxing ? 1 : 0;
+    }
+
+    const path =
+        `M ${cx} ${cy - r} ` +
+        `A ${r} ${r} 0 0 ${outerSweep} ${cx} ${cy + r} ` +
+        `A ${curveWidth} ${r} 0 0 ${innerSweep} ${cx} ${cy - r} Z`;
+
+    shadow.setAttribute("d", path);
+    disk.appendChild(shadow);
+}
+
+
+
+
+// Each news source gets its own story cache.
+
+const CACHE_MAX_AGE = 60 * 60 * 1000; // 1 hour
+const CACHE_RETRY_DELAY = 5 * 60 * 1000; // 5 minutes
+
+// Load initial cache states from browser localStorage if available
+let newsCache = JSON.parse(localStorage.getItem("orbit_news_cache")) || {};
+let newsCacheUpdatedAt = JSON.parse(localStorage.getItem("orbit_news_updated")) || {};
+let newsCacheLastAttemptAt = JSON.parse(localStorage.getItem("orbit_news_attempts")) || {};
+
+feeds.forEach(feed => {
+    if (!newsCache[feed.id]) newsCache[feed.id] = [];
+    if (!newsCacheUpdatedAt[feed.id]) newsCacheUpdatedAt[feed.id] = 0;
+    if (!newsCacheLastAttemptAt[feed.id]) newsCacheLastAttemptAt[feed.id] = 0;
+});
+
+function saveCacheToStorage() {
+    localStorage.setItem("orbit_news_cache", JSON.stringify(newsCache));
+    localStorage.setItem("orbit_news_updated", JSON.stringify(newsCacheUpdatedAt));
+    localStorage.setItem("orbit_news_attempts", JSON.stringify(newsCacheLastAttemptAt));
+}
+
+let currentFeedIndex = 0;
+let currentFeed = feeds[currentFeedIndex];
+
+let storyTimer = null;
+let storyTimerResolve = null;
+
+function nextFeed() {
+
+    currentFeedIndex++;
+
+    if (currentFeedIndex >= feeds.length) {
+        currentFeedIndex = 0;
+    }
+
+    currentFeed = feeds[currentFeedIndex];
+
+    getNews();
+
+}
+
+function nextFeed() {
+
+    currentFeedIndex++;
+
+    if (currentFeedIndex >= feeds.length) {
+        currentFeedIndex = 0;
+    }
+
+    currentFeed = feeds[currentFeedIndex];
+
+    getNews();
+
+}
+
+
+// Global tracker for the last time ANY news feed made a network request
+let lastGlobalFetchTime = 0;
+const GLOBAL_FETCH_COOLDOWN = 3 * 60 * 1000; // 3 minutes between ANY network fetches
+
+// Track dynamic penalty box timeouts for feeds that hit 429 errors (feedId -> timestamp)
+const feedPenaltyUntil = {};
+
+async function getNews() {
+    const currentSource = feeds[currentFeedIndex];
+    const cacheKey = currentSource.id;
+    const now = Date.now();
+
+    const cachedStories = newsCache[cacheKey] || [];
+    const cacheAge = now - (newsCacheUpdatedAt[cacheKey] || 0);
+
+    // 1. CACHE HIT: If stories are fresh (less than 30 mins old), use them immediately
+    if (cachedStories.length > 0 && cacheAge < CACHE_MAX_AGE) {
+        console.log(`📂 [CACHE HIT] ${currentSource.source} | Age: ${Math.round(cacheAge / 60000)}m | Using cached stories.`);
+        newsStories = cachedStories;
+        currentStory = 0;
+        showStory();
+        return;
+    }
+
+
+    // Load existing cached stories while we fetch fresh ones in the background
+    if (cachedStories.length > 0) {
+        newsStories = cachedStories;
+        currentStory = 0;
+        showStory();
+    }
+
+    // QUIET HOURS: No news requests from 11 PM to 5 AM
+    const localHour = new Date().getHours();
+
+    if (localHour >= 23 || localHour < 5) {
+        console.log(
+            `🌙 [QUIET HOURS] ${currentSource.source} | Skipping news fetch until 5 AM.`
+        );
+
+        if (cachedStories.length === 0) {
+            showUnavailableNews();
+        }
+
+        return;
+    }
+
+    // 2. FETCH FROM YOUR PRIVATE VERCEL PROXY
+    try {
+        const feed = currentSource.url || currentFeed.url;
+        
+        // Pointing directly to your personal Vercel instance!
+        const url = "https://orbit-rss-proxy.vercel.app/api?url=" + encodeURIComponent(feed);
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} Server Error`);
+        }
+
+        const data = await response.json();
+
+        // Check for items/entries returned by the Vercel proxy
+        const rawItems = data.items || data.entries || [];
+
+        if (!Array.isArray(rawItems) || rawItems.length === 0) {
+            throw new Error("Feed returned no usable stories");
+        }
+
+        // Map items into Orbit's required structure
+            const newStories = rawItems.slice(0, currentSource.storyCount || 5).map(item => ({
+            title: item.title,
+            pubDate: item.pubDate || item.date_published || item.isoDate || item.published || "",
+            link: item.link || item.url || "",
+            description: item.description || item.summary || item.content_snippet || "",
+            imageUrl: item.imageUrl || "" // Essential for passing Vercel images to UI
+        }));
+
+        if (newStories.length === 0) {
+            throw new Error("Feed returned no usable stories");
+        }
+
+        // Save fresh stories to cache
+        newsCache[cacheKey] = newStories;
+        newsCacheUpdatedAt[cacheKey] = Date.now();
+        saveCacheToStorage();
+
+        newsStories = newsCache[cacheKey];
+        currentStory = 0;
+        showStory();
+
+        console.log(`🚀 [VERCEL REFRESH SUCCESS] ${currentSource.source} updated! Received ${newStories.length} fresh stories:`);
+        console.table(
+            newStories.map((story, index) => ({
+                '#': index + 1,
+                'Title': story.title,
+                'Published Date': story.pubDate
+            }))
+        );
+
+    } catch (error) {
+        console.error(`❌ [VERCEL FETCH ERROR] ${currentSource.source}:`, error.message);
+
+        // Fall back to cached stories if available
+        if (newsCache[cacheKey] && newsCache[cacheKey].length > 0) {
+            newsStories = newsCache[cacheKey];
+            currentStory = 0;
+            showStory();
+        } else {
+            showUnavailableNews();
+        }
+    }
+}
+
+// Helper function to cleanly reset UI when news is missing/empty
+function showUnavailableNews() {
+    newsStories = [];
+    currentStory = 0;
+    const sourceObj = feeds[currentFeedIndex] || {};
+    document.getElementById("newsOrganization").textContent = sourceObj.source || "";
+    document.getElementById("newsSection").textContent = sourceObj.section || "";
+    document.getElementById("newsHeadline").textContent = "News unavailable";
+    document.getElementById("newsExcerpt").textContent = "";
+    document.getElementById("storyDate").textContent = "";
+    document.getElementById("storyNumber").textContent = "";
+    document.getElementById("newsStatus").textContent = "";
+    const photo = document.getElementById("storyPhoto");
+    if (photo) photo.style.display = "none";
+}
+
+
+// Decode HTML entities in headline text, including feeds that encode them twice.
+// A textarea decodes character entities without treating headline text as HTML markup.
+function decodeHeadlineEntities(text) {
+
+    if (!text) {
+        return "";
+    }
+
+    let decoded = String(text);
+    const temporary = document.createElement("textarea");
+
+    // A second pass handles cases such as &amp;#39; becoming an apostrophe.
+    // Stop early when the text no longer changes.
+    for (let i = 0; i < 3; i++) {
+        temporary.innerHTML = decoded;
+        const next = temporary.value;
+
+        if (next === decoded) {
+            break;
+        }
+
+        decoded = next;
+    }
+
+    return decoded.replace(/\\s+/g, " ").trim();
+}
+
+
+function cleanText(text) {
+
+    if (!text) {
+        return "";
+    }
+
+
+    const temporary =
+        document.createElement(
+            "div"
+        );
+
+
+    temporary.innerHTML =
+        text;
+
+
+    return temporary.textContent
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+function fitStoryExcerpt() {
+    const card = document.querySelector(".card");
+    const excerpt = document.getElementById("newsExcerpt");
+    const storyFooter = document.getElementById("storyFooter");
+    const excerptText = excerpt.textContent;
+
+    if (!excerptText) {
+        return;
+    }
+
+    let shortened = excerptText;
+
+    while (
+        excerpt.getBoundingClientRect().bottom >
+            storyFooter.getBoundingClientRect().top - 12 &&
+        shortened.length > 80
+    ) {
+        shortened =
+            shortened
+                .substring(
+                    0,
+                    shortened.lastIndexOf(" ", shortened.length - 30)
+                )
+                .trim() +
+            "...";
+
+        excerpt.textContent = shortened;
+    }
+}
+
+
+function getStoryImage(story) {
+    const isImage = (url) => {
+        if (!url || typeof url !== 'string') return false;
+        return !/\.(m3u8|mp4|webm|m4v|mov|flv|avi)(\?.*)?$/i.test(url);
+    };
+
+    if (story.imageUrl && isImage(story.imageUrl)) {
+        return story.imageUrl;
+    }
+
+    if (story.thumbnail && isImage(story.thumbnail)) {
+        return story.thumbnail;
+    }
+
+    if (story.enclosure && story.enclosure.link && isImage(story.enclosure.link)) {
+        return story.enclosure.link;
+    }
+
+    const htmlToScan = story.description || story.content || "";
+    if (!htmlToScan) return "";
+
+    const temporary = document.createElement("div");
+    temporary.innerHTML = htmlToScan;
+
+    const images = temporary.querySelectorAll("img");
+    for (let i = 0; i < images.length; i++) {
+        const src = images[i].getAttribute("src");
+        if (!src) continue;
+        if (/tracking|pixel/i.test(src)) continue;
+        if (isImage(src)) return src;
+    }
+
+    return "";
+}
+
+function showStory() {
+
+document.getElementById("newsOrganization").textContent =
+    currentFeed.source;
+
+document.getElementById("newsSection").textContent =
+    currentFeed.section;
+
+// Dynamically apply the category color straight from the feed data
+document.getElementById("newsSource").style.background = currentFeed.color;
+document.getElementById("newsSource").style.borderBottom = "3px solid #9fb7d9";
+
+
+    if (
+        newsStories.length === 0
+    ) {
+        return;
+    }
+
+
+    const story =
+        newsStories[
+            currentStory
+        ];
+
+
+    const headline =
+        document.getElementById(
+            "newsHeadline"
+        );
+
+
+    headline.textContent =
+        decodeHeadlineEntities(story.title);
+
+
+    headline.onclick =
+        function() {
+
+            window.open(
+                story.link,
+                "_blank"
+            );
+
+        };
+
+
+const description =
+    cleanText(
+        story.description ||
+        story.content
+    );
+
+
+document.getElementById(
+    "newsExcerpt"
+).textContent =
+    description;
+
+
+    const photo =
+        document.getElementById(
+            "storyPhoto"
+        );
+
+
+    photo.style.display =
+        "none";
+
+
+    photo.removeAttribute(
+        "src"
+    );
+
+delete photo.dataset.fallback;
+
+const storyImage =
+    getStoryImage(story);
+
+if (storyImage) {
+
+
+photo.onload =
+function() {
+
+    if (
+        photo.naturalWidth > 10 &&
+        photo.naturalHeight > 10
+    ) {
+        photo.style.display =
+            "block";
+
+        fitStoryExcerpt();
+
+    } else {
+        photo.style.display =
+            "none";
+
+        fitStoryExcerpt();
+    }
+
+};
+
+photo.onerror =
+    function() {
+
+        if (
+            story.content &&
+            photo.dataset.fallback !== "used"
+        ) {
+
+            const temporary =
+                document.createElement("div");
+
+            temporary.innerHTML =
+                story.content;
+
+            const images =
+                temporary.querySelectorAll("img");
+
+            for (
+                let i = 0;
+                i < images.length;
+                i++
+            ) {
+
+                const src =
+                    images[i].getAttribute("src");
+
+                if (!src) {
+                    continue;
+                }
+
+                if (
+                    /tracking|pixel/i.test(src)
+                ) {
+                    continue;
+                }
+
+                photo.dataset.fallback =
+                    "used";
+
+                photo.src =
+                    src;
+
+                return;
+            }
+        }
+
+        photo.style.display =
+            "none";
+    };
+
+
+photo.src =
+    storyImage;
+
+    }
+
+
+else {
+
+    fitStoryExcerpt();
+
+    // Special image lookup for The Onion only.
+    if (
+        feeds[currentFeedIndex].id === "the-onion" &&
+        story.link
+    ) {
+
+        const articleUrl = story.link;
+        const storyIndex = currentStory;
+
+        (async function () {
+
+            try {
+
+                const response = await fetch(
+                    "https://proxy.cors.dev/" + articleUrl
+                );
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const html = await response.text();
+
+                const page = new DOMParser().parseFromString(
+                    html,
+                    "text/html"
+                );
+
+                const imageUrl =
+                    page.querySelector(
+                        'meta[property="og:image"]'
+                    )?.content ||
+                    page.querySelector(
+                        'meta[name="twitter:image"]'
+                    )?.content ||
+                    "";
+
+                if (!imageUrl) {
+                    return;
+                }
+
+                // Make sure Orbit is still showing this story.
+                if (
+                    feeds[currentFeedIndex].id !== "the-onion" ||
+                    currentStory !== storyIndex ||
+                    newsStories[currentStory]?.link !== articleUrl
+                ) {
+                    return;
+                }
+
+                photo.onload = function () {
+
+                    if (
+                        photo.naturalWidth > 10 &&
+                        photo.naturalHeight > 10
+                    ) {
+                        photo.style.display = "block";
+                    } else {
+                        photo.style.display = "none";
+                    }
+
+                    fitStoryExcerpt();
+
+                };
+
+                photo.onerror = function () {
+
+                    photo.style.display = "none";
+                    fitStoryExcerpt();
+
+                };
+
+                photo.src = imageUrl;
+
+            } catch (error) {
+
+                console.log(
+                    "The Onion image lookup failed:",
+                    error.message
+                );
+
+            }
+
+        })();
+
+    }
+
+}
+
+
+document.getElementById(
+    "storyDate"
+).textContent =
+    story.pubDate
+        ? new Date(story.pubDate).toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            }
+        )
+        : "";
+
+    document.getElementById(
+        "storyNumber"
+    ).textContent =
+        "Story " +
+        (currentStory + 1) +
+        " of " +
+        newsStories.length;
+
+
+    document.getElementById(
+        "newsStatus"
+    ).textContent =
+        "Click the headline to read the full story";
+
+}
+
+function nextStory() {
+
+    if (newsStories.length === 0) {
+        return;
+    }
+
+    currentStory++;
+
+    if (currentStory >= newsStories.length) {
+        currentStory = 0;
+    }
+
+    showStory();
+
+    resetStoryTimer();
+}
+
+
+function previousStory() {
+
+    if (newsStories.length === 0) {
+        return;
+    }
+
+    currentStory--;
+
+    if (currentStory < 0) {
+        currentStory =
+            newsStories.length - 1;
+    }
+
+    showStory();
+
+    resetStoryTimer();
+}
+
+function waitForStory() {
+    return new Promise(function(resolve) {
+        storyTimerResolve = resolve;
+        storyTimer = setTimeout(function() {
+            storyTimer = null;
+            storyTimerResolve = null;
+            resolve();
+        }, STORY_TIME);
+    });
+}
+
+
+function resetStoryTimer() {
+    if (!storyTimerResolve) {
+        return;
+    }
+    clearTimeout(storyTimer);
+    const resolve = storyTimerResolve;
+    storyTimer = null;
+    storyTimerResolve = null;
+    resolve();
+}
+
+function cancelCurrentOrbitCard() {
+
+    // Mark the current card run as abandoned
+    orbitRunId++;
+
+    // Cancel an active Orbit Card timer
+    if (orbitCardTimerResolve) {
+        clearTimeout(orbitCardTimer);
+
+        const resolve = orbitCardTimerResolve;
+
+        orbitCardTimer = null;
+        orbitCardTimerResolve = null;
+
+        resolve();
+    }
+
+    // Cancel an active News story timer
+    if (storyTimerResolve) {
+        clearTimeout(storyTimer);
+
+        const resolve = storyTimerResolve;
+
+        storyTimer = null;
+        storyTimerResolve = null;
+
+        resolve();
+    }
+}
+
+async function runDash() {
+    while (true) {
+
+        const myOrbitRunId = orbitRunId;
+
+        await runCurrentOrbitCard();
+
+        if (myOrbitRunId !== orbitRunId) {
+            continue;
+        }
+
+        nextOrbitCard();
+
+    }
+}
+
+
+// Jump directly to the previous Section Card, wrapping around at the beginning.
+async function moveToPreviousSection() {
+    cancelCurrentOrbitCard();
+
+    for (let step = 1; step <= orbitCards.length; step++) {
+        const candidateIndex =
+            (currentOrbitCard - step + orbitCards.length) % orbitCards.length;
+
+        if (orbitCards[candidateIndex].id === "section-title") {
+            currentOrbitCard = candidateIndex;
+            console.log("Moved to previous section:", orbitCards[currentOrbitCard].sectionName);
+            return;
+        }
+    }
+}
+
+// Jump directly to the next Section Card, wrapping around at the end.
+async function moveToNextSection() {
+    cancelCurrentOrbitCard();
+
+    for (let step = 1; step <= orbitCards.length; step++) {
+        const candidateIndex =
+            (currentOrbitCard + step) % orbitCards.length;
+
+        if (orbitCards[candidateIndex].id === "section-title") {
+            currentOrbitCard = candidateIndex;
+            console.log("Moved to next section:", orbitCards[currentOrbitCard].sectionName);
+            return;
+        }
+    }
+}
+
+document.getElementById("previousSection").onclick = moveToPreviousSection;
+document.getElementById("nextSection").onclick = moveToNextSection;
+document.getElementById("previousCard").onclick = moveToPreviousOrbitCard;
+document.getElementById("nextCard").onclick = moveToNextOrbitCard;
+
+runDash();
+
+</script>
+
+</body>
+
+</html>
